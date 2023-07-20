@@ -1,16 +1,16 @@
-async function parse_year(data){
-    const parseDate = d3.timeParse("%Y");
-    data.forEach(d => {
-        d.Year = parseDate(d.Year);
-        for (const key in d) {
-        if (key !== "Year") {
-            d[key] = +d[key];
-        }
-        }
-    });
+// async function parse_year(data){
+//     const parseDate = d3.timeParse("%Y");
+//     data.forEach(d => {
+//         d.Year = parseDate(d.Year);
+//         for (const key in d) {
+//         if (key !== "Year") {
+//             d[key] = +d[key];
+//         }
+//         }
+//     });
 
-    return data;
-}
+//     return data;
+// }
 
 
 
@@ -19,14 +19,10 @@ async function parse_year(data){
 
 
 async function init() {
-    const data = await d3.csv("js/data/videogames_total_sales_per_year.csv");
-
-    
-    const data_parsed = await parse_year(data)
-
+    const data = await d3.csv("js/data/videogames_total_sales_per_year.csv");   
     console.log(data);
 
-
+    
 
 
     //create and place x and y axes
