@@ -1,3 +1,105 @@
+function draw_lines(svg, data, x_scale, y_scale, parse_year){
+
+
+    const curve_type = d3.curveMonotoneX; //change curve types
+    
+    //adding nintendo line
+
+    const line_nintendo = d3.line()
+        .x(d => x_scale(parse_year(d.Year)))
+        .y(d => y_scale(+d.Nintendo))
+        .curve(curve_type); 
+         
+        
+    // console.log(line_nintendo(data))
+
+    
+    svg.append("path")
+        .data(data)
+        .attr("fill", "none")
+        .attr("stroke", "#e4000f")
+        .attr("stroke-width", 1.5)
+        .attr("class", "line")
+        .attr("id", "nintendo_line")
+        .attr("d", line_nintendo(data));
+
+    
+    //adding Other line
+    const line_other = d3.line()
+        .x(d => x_scale(parse_year(d.Year)))
+        .y(d => y_scale(+d.Other))
+        .curve(curve_type); 
+        
+   
+    svg.append("path")
+        .data(data)
+        .attr("fill", "none")
+        .attr("stroke", "gray")
+        .attr("stroke-width", 1.5)
+        .attr("class", "line")
+        .attr("id", "other_line")
+        .attr("d", line_other(data));
+
+
+
+    //adding Sega line
+    const line_sega = d3.line()
+        .x(d => x_scale(parse_year(d.Year)))
+        .y(d => y_scale(+d.Sega))
+        .curve(curve_type); 
+
+        
+        
+   
+    svg.append("path")
+        .data(data)
+        .attr("fill", "none")
+        .attr("stroke", "orange")
+        .attr("stroke-width", 1.5)
+        .attr("class", "line")
+        .attr("id", "Sega_line")
+        .attr("d", line_sega(data));
+
+
+    //adding Sony line
+    const line_sony = d3.line()
+        .x(d => x_scale(parse_year(d.Year)))
+        .y(d => y_scale(+d.Sony))
+        .curve(curve_type); 
+        
+        
+   
+    svg.append("path")
+        .data(data)
+        .attr("fill", "none")
+        .attr("stroke", "blue")
+        .attr("stroke-width", 1.5)
+        .attr("class", "line")
+        .attr("id", "Sony_line")
+        .attr("d", line_sony(data));
+
+
+    //adding Xbox line
+    const line_xbox = d3.line()
+        .x(d => x_scale(parse_year(d.Year)))
+        .y(d => y_scale(+d.Xbox))
+        .curve(curve_type); 
+        
+        
+   
+    svg.append("path")
+        .data(data)
+        .attr("fill", "none")
+        .attr("stroke", "green")
+        .attr("stroke-width", 1.5)
+        .attr("class", "line")
+        .attr("id", "Xbox_line")
+        .attr("d", line_xbox(data));
+
+
+
+}
+
 async function init() {
     
     //define width, height and margin variables
@@ -56,42 +158,7 @@ async function init() {
     
     // console.log("here")
 
+    draw_lines(svg, data, x_scale, y_scale, parse_year);
     
-    const curve_type = d3.curveMonotoneX //change curve types
-    
-    //adding nintendo line
-
-    const line_nintendo = d3.line()
-        .x(d => x_scale(parse_year(d.Year)))
-        .y(d => y_scale(+d.Nintendo));
-        // .curve(d3.curveMonotoneX); 
-        
-    // console.log(line_nintendo(data))
-
-    
-    svg.append("path")
-        .data(data)
-        .attr("fill", "none")
-        .attr("stroke", "#e4000f")
-        .attr("stroke-width", 1.5)
-        .attr("d", line_nintendo(data));
-
-    
-    //adding Other line
-
-    const line_other = d3.line()
-        .x(d => x_scale(parse_year(d.Year)))
-        .y(d => y_scale(+d.Other));
-        // .curve(d3.curveMonotoneX); 
-        
-    console.log(line_other(data))
-
-    
-    svg.append("path")
-        .data(data)
-        .attr("fill", "none")
-        .attr("stroke", "gray")
-        .attr("stroke-width", 1.5)
-        .attr("d", line_other(data));
 
 }
