@@ -8,8 +8,8 @@ async function init() {
     //add border for debugging; might change it later if needed
     d3.select('#chart').style("border", "2px solid black");
 
-    const data = await d3.csv("js/data/videogames_total_sales_per_year_nintendo.csv");   
-    // console.log(data);  //checking to see if the data is being read in properly
+    const data = await d3.csv("js/data/videogames_total_sales_per_year.csv");   
+    console.log(data);  //checking to see if the data is being read in properly
 
     //defining the svg element that will be added into the overall svg element
     const svg = d3.select("#chart")
@@ -22,8 +22,8 @@ async function init() {
         
     //testing out if the max function works
     // console.log(d3.max(data, d => d3.max([+d.Nintendo, +d.Other, +d.PC, +d.Sega, +d.Sony, +d.Xbox])));
+   
 
-    
 
     //create x_scale
     const parse_year = d3.timeParse("%Y");
@@ -56,22 +56,42 @@ async function init() {
     
     // console.log("here")
 
+    
+    const curve_type = d3.curveMonotoneX //change curve types
+    
     //adding nintendo line
 
     const line_nintendo = d3.line()
-        .x(d => x_scale(d.Year))
-        .y(d => y_scale(+d.Nintendo))
+        .x(d => x_scale(parse_year(d.Year)))
+        .y(d => y_scale(+d.Nintendo));
+        // .curve(d3.curveMonotoneX); 
         
-    console.log(data, d=> parse_year(d.Year))
+    // console.log(line_nintendo(data))
 
+    
     svg.append("path")
         .data(data)
         .attr("fill", "none")
-        .attr("stroke", "steelblue")
+        .attr("stroke", "#e4000f")
         .attr("stroke-width", 1.5)
-        .attr("d", line_nintendo);
+        .attr("d", line_nintendo(data));
+
     
+    //adding Other line
+
+    const line_other = d3.line()
+        .x(d => x_scale(parse_year(d.Year)))
+        .y(d => y_scale(+d.Other));
+        // .curve(d3.curveMonotoneX); 
+        
+    console.log(line_other(data))
+
     
+    svg.append("path")
+        .data(data)
+        .attr("fill", "none")
+        .attr("stroke", "gray")
+        .attr("stroke-width", 1.5)
+        .attr("d", line_other(data));
+
 }
-
-
