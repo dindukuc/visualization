@@ -8,7 +8,7 @@ async function init() {
     //add border for debugging; might change it later if needed
     d3.select('#chart').style("border", "2px solid black");
 
-    const data = await d3.csv("js/data/videogames_total_sales_per_year.csv");   
+    const data = await d3.csv("js/data/videogames_total_sales_per_year_nintendo.csv");   
     // console.log(data);  //checking to see if the data is being read in properly
 
     //defining the svg element that will be added into the overall svg element
@@ -21,7 +21,7 @@ async function init() {
     
         
     //testing out if the max function works
-    // console.log(d3.max(data, d => d3.max([d.Nintendo, d.Other, d.PC, d.Sega, d.Sony, d.Xbox])));
+    // console.log(d3.max(data, d => d3.max([+d.Nintendo, +d.Other, +d.PC, +d.Sega, +d.Sony, +d.Xbox])));
 
     
 
@@ -57,15 +57,19 @@ async function init() {
     // console.log("here")
 
     //adding nintendo line
+
+    const line_nintendo = d3.line()
+        .x(d => x_scale(d.Year))
+        .y(d => y_scale(+d.Nintendo))
+        
+    console.log(data, d=> parse_year(d.Year))
+
     svg.append("path")
-      .datum(data)
-      .attr("fill", "none")
-      .attr("stroke", "steelblue")
-      .attr("stroke-width", 1.5)
-      .attr("d", d3.line()
-        .x(function(d) { return x_scale(d.Year) })
-        .y(function(d) { return y_scale(d.Nintendo) })
-        );
+        .data(data)
+        .attr("fill", "none")
+        .attr("stroke", "steelblue")
+        .attr("stroke-width", 1.5)
+        .attr("d", line_nintendo);
     
     
 }
