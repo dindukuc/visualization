@@ -1,7 +1,7 @@
-function draw_lines(svg, data, x_scale, y_scale, parse_year){
+function draw_lines(svg, data, x_scale, y_scale, parse_year, curve_type){
 
 
-    const curve_type = d3.curveMonotoneX; //change curve types
+    
     
     //adding nintendo line
 
@@ -57,7 +57,7 @@ function draw_lines(svg, data, x_scale, y_scale, parse_year){
         .attr("stroke", "orange")
         .attr("stroke-width", 1.5)
         .attr("class", "line")
-        .attr("id", "Sega_line")
+        .attr("id", "sega_line")
         .attr("d", line_sega(data));
 
 
@@ -75,7 +75,7 @@ function draw_lines(svg, data, x_scale, y_scale, parse_year){
         .attr("stroke", "blue")
         .attr("stroke-width", 1.5)
         .attr("class", "line")
-        .attr("id", "Sony_line")
+        .attr("id", "sony_line")
         .attr("d", line_sony(data));
 
 
@@ -93,12 +93,93 @@ function draw_lines(svg, data, x_scale, y_scale, parse_year){
         .attr("stroke", "green")
         .attr("stroke-width", 1.5)
         .attr("class", "line")
-        .attr("id", "Xbox_line")
+        .attr("id", "xbox_line")
         .attr("d", line_xbox(data));
 
 
 
 }
+
+function redraw_nintendo_line(line, data, x_scale, y_scale, parse_year, curve_type, duration){
+    
+    const line_nintendo = d3.line()
+        .x(d => x_scale(parse_year(d.Year)))
+        .y(d => y_scale(+d.Nintendo))
+        .curve(curve_type);
+
+
+    line.select('#nintendo_line')
+            .transition()
+            .duration(duration)
+            .attr("d", line_nintendo(data))
+
+    
+}
+
+function redraw_other_line(line, data, x_scale, y_scale, parse_year, curve_type, duration){
+    
+    const line_other = d3.line()
+    .x(d => x_scale(parse_year(d.Year)))
+    .y(d => y_scale(+d.Other))
+    .curve(curve_type);
+
+
+    line.select('#other_line')
+            .transition()
+            .duration(duration)
+            .attr("d", line_other(data))
+
+    
+}
+
+function redraw_sega_line(line, data, x_scale, y_scale, parse_year, curve_type, duration){
+    
+    const line_sega = d3.line()
+        .x(d => x_scale(parse_year(d.Year)))
+        .y(d => y_scale(+d.Sega))
+        .curve(curve_type); 
+
+
+    line.select('#sega_line')
+            .transition()
+            .duration(duration)
+            .attr("d", line_sega(data))
+
+    
+}
+
+function redraw_sony_line(line, data, x_scale, y_scale, parse_year, curve_type, duration){
+    
+    const line_sony = d3.line()
+        .x(d => x_scale(parse_year(d.Year)))
+        .y(d => y_scale(+d.Sony))
+        .curve(curve_type); 
+
+
+    line.select('#sony_line')
+            .transition()
+            .duration(duration)
+            .attr("d", line_sony(data))
+
+    
+}
+
+function redraw_xbox_line(line, data, x_scale, y_scale, parse_year, curve_type, duration){
+    
+    const line_xbox = d3.line()
+        .x(d => x_scale(parse_year(d.Year)))
+        .y(d => y_scale(+d.Xbox))
+        .curve(curve_type); 
+
+
+    line.select('#xbox_line')
+            .transition()
+            .duration(duration)
+            .attr("d", line_xbox(data))
+
+    
+}
+
 
 async function init() {
     
@@ -106,7 +187,8 @@ async function init() {
     const width = 1440
     const height = 800
     const margin = ({top: 20, right: 30, bottom: 30, left: 40})
-    
+    const curve_type = d3.curveMonotoneX; //change curve types
+
     //add border for debugging; might change it later if needed
     d3.select('#chart').style("border", "2px solid black");
 
@@ -125,8 +207,6 @@ async function init() {
     //testing out if the max function works
     // console.log(d3.max(data, d => d3.max([+d.Nintendo, +d.Other, +d.PC, +d.Sega, +d.Sony, +d.Xbox])));
    
-
-
     //create x_scale
     const parse_year = d3.timeParse("%Y");
     var x_scale = d3.scaleTime()
@@ -144,21 +224,92 @@ async function init() {
         .range([height, 0]);
 
     //place x-axis
-    svg.append("g")
+    const x_axis = svg.append("g")
         .attr("transform", `translate(0, ${height})`)
         .call(
             d3.axisBottom(x_scale) 
         );
 
     //place y-axis
-    svg.append("g")
+    const y_axis = svg.append("g")
         .call(d3.axisLeft(y_scale).tickFormat(d3.format("~s")) );
 
    
     
+    
+
     // console.log("here")
 
-    draw_lines(svg, data, x_scale, y_scale, parse_year);
     
+    // Add a clipPath: everything out of this area won't be drawn.
+    const clip = svg.append("defs").append("svg:clipPath")
+        .attr("id", "clip")
+        .append("svg:rect")
+        .attr("width", width )
+        .attr("height", height )
+        .attr("x", 0)
+        .attr("y", 0);
+
+    // Add brushing
+    const brush = d3.brushX()                   // Add the brush feature using the d3.brush function
+        .extent( [ [0,0], [width,height] ] )  // initialise the brush area: start at 0,0 and finishes at width,height: it means I select the whole graph area
+        .on("end", updateChart)               // Each time the brush selection changes, trigger the 'updateChart' function
+
+    // Create the line variable: where both the line and the brush take place
+    const line = svg.append('g')
+      .attr("clip-path", "url(#clip)")
+
+    
+    draw_lines(line, data, x_scale, y_scale, parse_year, curve_type);
+
+    line.append("g")
+        .attr("class", "brush")
+        .call(brush);
+
+
+
+    
+
+
+    // A function that set idleTimeOut to null
+    let idleTimeout
+    function idled() { idleTimeout = null; }
+
+    function updateChart(event,d) {
+
+        // What are the selected boundaries?
+        extent = event.selection
+    
+        // If no selection, back to initial coordinate. Otherwise, update X axis domain
+        if(!extent){
+          if (!idleTimeout) return idleTimeout = setTimeout(idled, 350); // This allows to wait a little bit
+          x_scale.domain([ 4,8])
+        }else{
+          x_scale.domain([ x_scale.invert(extent[0]), x_scale.invert(extent[1]) ])
+          line.select(".brush").call(brush.move, null) // This remove the grey brush area as soon as the selection has been done
+        }
+        
+        // Update axis and line position
+        x_axis.transition().duration(1000).call(d3.axisBottom(x_scale))
+        
+        redraw_nintendo_line(line, data, x_scale, y_scale, parse_year, curve_type, 1000)
+        redraw_other_line(line, data, x_scale, y_scale, parse_year, curve_type, 1000)
+        redraw_sega_line(line, data, x_scale, y_scale, parse_year, curve_type, 1000)
+        redraw_sony_line(line, data, x_scale, y_scale, parse_year, curve_type, 1000)
+        redraw_xbox_line(line, data, x_scale, y_scale, parse_year, curve_type, 1000)
+    }
+
+
+
+    svg.on("dblclick",function(){
+        x_scale.domain(d3.extent(data, d => parse_year(d.Year)))
+        x_axis.transition().call(d3.axisBottom(x_scale))
+        
+        redraw_nintendo_line(line, data, x_scale, y_scale, parse_year, curve_type, 0)
+        redraw_other_line(line, data, x_scale, y_scale, parse_year, curve_type, 0)
+        redraw_sega_line(line, data, x_scale, y_scale, parse_year, curve_type, 0)
+        redraw_sony_line(line, data, x_scale, y_scale, parse_year, curve_type, 0)
+        redraw_xbox_line(line, data, x_scale, y_scale, parse_year, curve_type, 0)
+      });
 
 }
