@@ -1,20 +1,7 @@
-//defining tooltips
-const tooltip = d3.select("body").append("div")
-.attr("class", "tooltip")
-.style("opacity", 0)
-.style("position", "absolute");
 
 
-//defining points
-line.selectAll("points")
-.data(data)
-.enter()
-.append("circle")
-.attr("cx", function(d) { return x_scale(parse_year(d.Year)); })      
-.attr("cy", function(d) { return y_scale(+d.Nintendo); })    
-.attr("r", 1)
-.attr("class","point")
-.style("opacity", 1);
+
+
 
 line.selectAll("points")
 .data(data)

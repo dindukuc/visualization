@@ -1,9 +1,6 @@
-function draw_lines(svg, data, x_scale, y_scale, parse_year, curve_type){
+function draw_lines(svg, data, x_scale, y_scale, parse_year, curve_type, marker_size){
 
-
-    
-    
-    //adding nintendo line
+    //defining nintendo line generator
 
     const line_nintendo = d3.line()
         .x(d => x_scale(parse_year(d.Year)))
@@ -13,7 +10,7 @@ function draw_lines(svg, data, x_scale, y_scale, parse_year, curve_type){
         
     // console.log(line_nintendo(data))
 
-    
+    //drawing nintendo line
     svg.append("path")
         .data(data)
         .attr("fill", "none")
@@ -22,6 +19,19 @@ function draw_lines(svg, data, x_scale, y_scale, parse_year, curve_type){
         .attr("class", "line")
         .attr("id", "nintendo_line")
         .attr("d", line_nintendo(data));
+
+
+    //defining points for nintendo line
+    svg.selectAll("points")
+        .data(data)
+        .enter()
+        .append("circle")
+        .attr("cx", function(d) { return x_scale(parse_year(d.Year)); })      
+        .attr("cy", function(d) { return y_scale(+d.Nintendo); })    
+        .attr("r", marker_size)
+        .attr("class","nintendo_markers")
+        .style("opacity", 1);
+
 
     
     //adding Other line
@@ -39,6 +49,17 @@ function draw_lines(svg, data, x_scale, y_scale, parse_year, curve_type){
         .attr("class", "line")
         .attr("id", "other_line")
         .attr("d", line_other(data));
+
+    svg.selectAll("points")
+        .data(data)
+        .enter()
+        .append("circle")
+        .attr("cx", function(d) { return x_scale(parse_year(d.Year)); })      
+        .attr("cy", function(d) { return y_scale(+d.Other); })    
+        .attr("r", marker_size)
+        .attr("class","other_markers")
+        .style("opacity", 1);
+
 
 
 
@@ -60,6 +81,18 @@ function draw_lines(svg, data, x_scale, y_scale, parse_year, curve_type){
         .attr("id", "sega_line")
         .attr("d", line_sega(data));
 
+    
+    svg.selectAll("points")
+        .data(data)
+        .enter()
+        .append("circle")
+        .attr("cx", function(d) { return x_scale(parse_year(d.Year)); })      
+        .attr("cy", function(d) { return y_scale(+d.Sega); })    
+        .attr("r", marker_size)
+        .attr("class","sega_markers")
+        .style("opacity", 1);
+
+
 
     //adding Sony line
     const line_sony = d3.line()
@@ -79,6 +112,21 @@ function draw_lines(svg, data, x_scale, y_scale, parse_year, curve_type){
         .attr("d", line_sony(data));
 
 
+    svg.selectAll("points")
+        .data(data)
+        .enter()
+        .append("circle")
+        .attr("cx", function(d) { return x_scale(parse_year(d.Year)); })      
+        .attr("cy", function(d) { return y_scale(+d.Sony); })    
+        .attr("r", marker_size)
+        .attr("class","sony_markers")
+        .style("opacity", 1);
+
+
+
+
+
+
     //adding Xbox line
     const line_xbox = d3.line()
         .x(d => x_scale(parse_year(d.Year)))
@@ -96,6 +144,16 @@ function draw_lines(svg, data, x_scale, y_scale, parse_year, curve_type){
         .attr("id", "xbox_line")
         .attr("d", line_xbox(data));
 
+    svg.selectAll("points")
+        .data(data)
+        .enter()
+        .append("circle")
+        .attr("cx", function(d) { return x_scale(parse_year(d.Year)); })      
+        .attr("cy", function(d) { return y_scale(+d.Xbox); })    
+        .attr("r", marker_size)
+        .attr("class","xbox_markers")
+        .style("opacity", 1);
+
 
 
 }
@@ -111,7 +169,13 @@ function redraw_nintendo_line(line, data, x_scale, y_scale, parse_year, curve_ty
     line.select('#nintendo_line')
             .transition()
             .duration(duration)
-            .attr("d", line_nintendo(data))
+            .attr("d", line_nintendo(data));
+    
+    line.selectAll(".nintendo_markers")
+        .transition()
+        .duration(duration)
+        .attr("cx", function(d) { return x_scale(parse_year(d.Year)); })      
+        .attr("cy", function(d) { return y_scale(+d.Nintendo); });
 
     
 }
@@ -127,8 +191,13 @@ function redraw_other_line(line, data, x_scale, y_scale, parse_year, curve_type,
     line.select('#other_line')
             .transition()
             .duration(duration)
-            .attr("d", line_other(data))
-
+            .attr("d", line_other(data));
+    
+    line.selectAll(".other_markers")
+        .transition()
+        .duration(duration)
+        .attr("cx", function(d) { return x_scale(parse_year(d.Year)); })      
+        .attr("cy", function(d) { return y_scale(+d.Other); });
     
 }
 
@@ -143,7 +212,13 @@ function redraw_sega_line(line, data, x_scale, y_scale, parse_year, curve_type, 
     line.select('#sega_line')
             .transition()
             .duration(duration)
-            .attr("d", line_sega(data))
+            .attr("d", line_sega(data));
+    
+    line.selectAll(".sega_markers")
+        .transition()
+        .duration(duration)
+        .attr("cx", function(d) { return x_scale(parse_year(d.Year)); })      
+        .attr("cy", function(d) { return y_scale(+d.Sega); });
 
     
 }
@@ -159,7 +234,13 @@ function redraw_sony_line(line, data, x_scale, y_scale, parse_year, curve_type, 
     line.select('#sony_line')
             .transition()
             .duration(duration)
-            .attr("d", line_sony(data))
+            .attr("d", line_sony(data));
+    
+    line.selectAll(".sony_markers")
+        .transition()
+        .duration(duration)
+        .attr("cx", function(d) { return x_scale(parse_year(d.Year)); })      
+        .attr("cy", function(d) { return y_scale(+d.Sony); });
 
     
 }
@@ -175,7 +256,13 @@ function redraw_xbox_line(line, data, x_scale, y_scale, parse_year, curve_type, 
     line.select('#xbox_line')
             .transition()
             .duration(duration)
-            .attr("d", line_xbox(data))
+            .attr("d", line_xbox(data));
+
+    line.selectAll(".xbox_markers")
+        .transition()
+        .duration(duration)
+        .attr("cx", function(d) { return x_scale(parse_year(d.Year)); })      
+        .attr("cy", function(d) { return y_scale(+d.Xbox); });
 
     
 }
@@ -189,6 +276,7 @@ async function init() {
     const height = 800
     const margin = ({top: 20, right: 30, bottom: 30, left: 40})
     const curve_type = d3.curveMonotoneX; //change curve types
+    const marker_size = 2; //change marker size on points
 
     //add border for debugging; might change it later if needed
     d3.select('#chart').style("border", "2px solid black");
@@ -257,7 +345,7 @@ async function init() {
       .attr("clip-path", "url(#clip)")
 
     
-    draw_lines(line, data, x_scale, y_scale, parse_year, curve_type);
+    draw_lines(line, data, x_scale, y_scale, parse_year, curve_type, marker_size);
 
     line.append("g")
         .attr("class", "brush") 
@@ -311,6 +399,13 @@ async function init() {
       });
 
 
-    var zoom = d3.zoom
     
+    //defining tooltips
+    const tooltip = d3.select("body").append("div")
+        .attr("class", "tooltip")
+        .style("opacity", 0)
+        .style("position", "absolute");
+        
+    
+
 }
