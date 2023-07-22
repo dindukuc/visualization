@@ -181,6 +181,7 @@ function redraw_xbox_line(line, data, x_scale, y_scale, parse_year, curve_type, 
 }
 
 
+
 async function init() {
     
     //define width, height and margin variables
@@ -222,6 +223,7 @@ async function init() {
             0, d3.max(data, d => d3.max([+d.Nintendo, +d.Other, +d.PC, +d.Sega, +d.Sony, +d.Xbox]))
         ])
         .range([height, 0]);
+
 
     //place x-axis
     const x_axis = svg.append("g")
@@ -278,7 +280,7 @@ async function init() {
           y_scale.domain([ 0, d3.max(data, d => d3.max([+d.Nintendo, +d.Other, +d.PC, +d.Sega, +d.Sony, +d.Xbox])) ])
         }else{
           x_scale.domain([ x_scale.invert(extent[0][0]), x_scale.invert(extent[1][0]) ])
-          y_scale.domain([ y_scale.invert(extent[1][0]), y_scale.invert(extent[1][1]) ])
+          y_scale.domain([ y_scale.invert(extent[1][1]), y_scale.invert(extent[0][1]) ])
           line.select(".brush").call(brush.move, null) // This remove the grey brush area as soon as the selection has been done
         }
         
