@@ -427,16 +427,16 @@ async function init() {
 
     svg.on("dblclick",function(){
         x_scale.domain(d3.extent(data, d => parse_year(d.Year)))
-        x_axis.transition().call(d3.axisBottom(x_scale))
+        x_axis.transition().duration(1000).call(d3.axisBottom(x_scale))
         
         y_scale.domain([ 0, 350]) //d3.max(data, d => d3.max([+d.Nintendo, +d.Other, +d.PC, +d.Sega, +d.Sony, +d.Xbox])) 
-        y_axis.transition().call(d3.axisLeft(y_scale))
+        y_axis.transition().duration(1000).call(d3.axisLeft(y_scale))
 
-        redraw_nintendo_line(line, data, x_scale, y_scale, parse_year, curve_type, 0)
-        redraw_other_line(line, data, x_scale, y_scale, parse_year, curve_type, 0)
-        redraw_sega_line(line, data, x_scale, y_scale, parse_year, curve_type, 0)
-        redraw_sony_line(line, data, x_scale, y_scale, parse_year, curve_type, 0)
-        redraw_xbox_line(line, data, x_scale, y_scale, parse_year, curve_type, 0)
+        redraw_nintendo_line(line, data, x_scale, y_scale, parse_year, curve_type, 1000)
+        redraw_other_line(line, data, x_scale, y_scale, parse_year, curve_type, 1000)
+        redraw_sega_line(line, data, x_scale, y_scale, parse_year, curve_type, 1000)
+        redraw_sony_line(line, data, x_scale, y_scale, parse_year, curve_type, 1000)
+        redraw_xbox_line(line, data, x_scale, y_scale, parse_year, curve_type, 1000)
       });
 
 
