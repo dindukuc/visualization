@@ -236,7 +236,7 @@ async function init() {
 
    
     
-    // Add a clipPath: everything out of this area won't be drawn.
+    // Add a clipPath everything out of this area won't be drawn
     const clip = svg.append("defs").append("svg:clipPath")
         .attr("id", "clip")
         .append("svg:rect")
@@ -245,12 +245,12 @@ async function init() {
         .attr("x", 0)
         .attr("y", 0);
 
-    // Add brushing
-    const brush = d3.brushX()                   // Add the brush feature using the d3.brush function
-        .extent( [ [0,0], [width,height] ] )  // initialise the brush area: start at 0,0 and finishes at width,height: it means I select the whole graph area
-        .on("end", updateChart)               // Each time the brush selection changes, trigger the 'updateChart' function
+    // Add brushing to line chart
+    const brush = d3.brush()                   
+        .extent( [ [0,0], [width,height] ] )  
+        .on("end", updateChart)               
 
-    // Create the line variable: where both the line and the brush take place
+    // line variable; wiill containall of the lines that are created in the draw_lines function
     const line = svg.append('g')
       .attr("clip-path", "url(#clip)")
 
@@ -258,31 +258,33 @@ async function init() {
     draw_lines(line, data, x_scale, y_scale, parse_year, curve_type);
 
     line.append("g")
-        .attr("class", "brush")
-        .call(brush);
+        .attr("class", "brush") 
+        .call(brush); //calling brush function on line
     
 
-    // A function that set idleTimeOut to null
+    // sets idleTimeOut to null
     let idleTimeout
     function idled() { idleTimeout = null; }
 
     function updateChart(event,d) {
 
-        // What are the selected boundaries?
+        // get selected boundaries
         extent = event.selection
     
-        // If no selection, back to initial coordinate. Otherwise, update X axis domain
+        // If no selection, back to initial coordinate; Otherwise, updates the X axis domain
         if(!extent){
           if (!idleTimeout) return idleTimeout = setTimeout(idled, 350); // This allows to wait a little bit
-          x_scale.domain([ 4,8])
+          x_scale.domain(d3.extent(data, d => parse_year(d.Year)))
+          y_scale.domain([ 0, d3.max(data, d => d3.max([+d.Nintendo, +d.Other, +d.PC, +d.Sega, +d.Sony, +d.Xbox])) ])
         }else{
-          x_scale.domain([ x_scale.invert(extent[0]), x_scale.invert(extent[1]) ])
+          x_scale.domain([ x_scale.invert(extent[0][0]), x_scale.invert(extent[1][0]) ])
+          y_scale.domain([ y_scale.invert(extent[1][0]), y_scale.invert(extent[1][1]) ])
           line.select(".brush").call(brush.move, null) // This remove the grey brush area as soon as the selection has been done
         }
         
         // Update axis and line position
         x_axis.transition().duration(1000).call(d3.axisBottom(x_scale))
-        
+        y_axis.transition().duration(1000).call(d3.axisLeft(y_scale))
         redraw_nintendo_line(line, data, x_scale, y_scale, parse_year, curve_type, 1000)
         redraw_other_line(line, data, x_scale, y_scale, parse_year, curve_type, 1000)
         redraw_sega_line(line, data, x_scale, y_scale, parse_year, curve_type, 1000)
@@ -296,6 +298,9 @@ async function init() {
         x_scale.domain(d3.extent(data, d => parse_year(d.Year)))
         x_axis.transition().call(d3.axisBottom(x_scale))
         
+        y_scale.domain([ 0, d3.max(data, d => d3.max([+d.Nintendo, +d.Other, +d.PC, +d.Sega, +d.Sony, +d.Xbox])) ])
+        y_axis.transition().call(d3.axisLeft(y_scale))
+
         redraw_nintendo_line(line, data, x_scale, y_scale, parse_year, curve_type, 0)
         redraw_other_line(line, data, x_scale, y_scale, parse_year, curve_type, 0)
         redraw_sega_line(line, data, x_scale, y_scale, parse_year, curve_type, 0)
@@ -304,6 +309,6 @@ async function init() {
       });
 
 
-
+    var zoom = d3.zoom
     
 }
