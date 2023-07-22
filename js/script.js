@@ -236,11 +236,6 @@ async function init() {
 
    
     
-    
-
-    // console.log("here")
-
-    
     // Add a clipPath: everything out of this area won't be drawn.
     const clip = svg.append("defs").append("svg:clipPath")
         .attr("id", "clip")
@@ -265,11 +260,7 @@ async function init() {
     line.append("g")
         .attr("class", "brush")
         .call(brush);
-
-
-
     
-
 
     // A function that set idleTimeOut to null
     let idleTimeout
@@ -312,4 +303,7 @@ async function init() {
         redraw_xbox_line(line, data, x_scale, y_scale, parse_year, curve_type, 0)
       });
 
+
+
+    
 }
