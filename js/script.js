@@ -1,5 +1,6 @@
 function draw_lines(svg, data, x_scale, y_scale, parse_year, curve_type, marker_size){
 
+
     //defining nintendo line generator
 
     const line_nintendo = d3.line()
@@ -211,7 +212,7 @@ function redraw_other_line(line, data, x_scale, y_scale, parse_year, curve_type,
         .attr("cx", function(d) { return x_scale(parse_year(d.Year)); })      
         .attr("cy", function(d) { return y_scale(+d.Other); });
     
-    line.selectAll(".other_markers")
+    line.selectAll(".other_tooltip_markers")
         .transition()
         .duration(duration)
         .attr("cx", function(d) { return x_scale(parse_year(d.Year)); })      
@@ -233,6 +234,12 @@ function redraw_sega_line(line, data, x_scale, y_scale, parse_year, curve_type, 
             .attr("d", line_sega(data));
     
     line.selectAll(".sega_markers")
+        .transition()
+        .duration(duration)
+        .attr("cx", function(d) { return x_scale(parse_year(d.Year)); })      
+        .attr("cy", function(d) { return y_scale(+d.Sega); });
+
+    line.selectAll(".sega_tooltip_markers")
         .transition()
         .duration(duration)
         .attr("cx", function(d) { return x_scale(parse_year(d.Year)); })      
@@ -260,6 +267,12 @@ function redraw_sony_line(line, data, x_scale, y_scale, parse_year, curve_type, 
         .attr("cx", function(d) { return x_scale(parse_year(d.Year)); })      
         .attr("cy", function(d) { return y_scale(+d.Sony); });
 
+    line.selectAll(".sony_tooltip_markers")
+        .transition()
+        .duration(duration)
+        .attr("cx", function(d) { return x_scale(parse_year(d.Year)); })      
+        .attr("cy", function(d) { return y_scale(+d.Sony); });
+
     
 }
 
@@ -282,7 +295,12 @@ function redraw_xbox_line(line, data, x_scale, y_scale, parse_year, curve_type, 
         .attr("cx", function(d) { return x_scale(parse_year(d.Year)); })      
         .attr("cy", function(d) { return y_scale(+d.Xbox); });
 
-    
+    line.selectAll(".xbox_tooltip_markers")
+        .transition()
+        .duration(duration)
+        .attr("cx", function(d) { return x_scale(parse_year(d.Year)); })      
+        .attr("cy", function(d) { return y_scale(+d.Xbox); });
+
 }
 
 
@@ -328,7 +346,8 @@ async function init() {
     //create y_scale
     var y_scale = d3.scaleLinear()
         .domain([
-            0, d3.max(data, d => d3.max([+d.Nintendo, +d.Other, +d.PC, +d.Sega, +d.Sony, +d.Xbox]))
+            0, 350   //d3.max(data, d => d3.max([+d.Nintendo, +d.Other, +d.PC, +d.Sega, +d.Sony, +d.Xbox])) 
+            //changed domain -- maybe make it a variable later
         ])
         .range([height, 0]);
 
@@ -364,7 +383,8 @@ async function init() {
     const line = svg.append('g')
       .attr("clip-path", "url(#clip)")
     
-  
+    
+
    
     draw_lines(line, data, x_scale, y_scale, parse_year, curve_type, marker_size);
 
@@ -386,7 +406,7 @@ async function init() {
         if(!extent){
           if (!idleTimeout) return idleTimeout = setTimeout(idled, 350); // This allows to wait a little bit
           x_scale.domain(d3.extent(data, d => parse_year(d.Year)))
-          y_scale.domain([ 0, d3.max(data, d => d3.max([+d.Nintendo, +d.Other, +d.PC, +d.Sega, +d.Sony, +d.Xbox])) ])
+          y_scale.domain([ 0, 350 ]) //changed domain -- maybe make it a variable later
         }else{
           x_scale.domain([ x_scale.invert(extent[0][0]), x_scale.invert(extent[1][0]) ])
           y_scale.domain([ y_scale.invert(extent[1][1]), y_scale.invert(extent[0][1]) ])
@@ -409,7 +429,7 @@ async function init() {
         x_scale.domain(d3.extent(data, d => parse_year(d.Year)))
         x_axis.transition().call(d3.axisBottom(x_scale))
         
-        y_scale.domain([ 0, d3.max(data, d => d3.max([+d.Nintendo, +d.Other, +d.PC, +d.Sega, +d.Sony, +d.Xbox])) ])
+        y_scale.domain([ 0, 350]) //d3.max(data, d => d3.max([+d.Nintendo, +d.Other, +d.PC, +d.Sega, +d.Sony, +d.Xbox])) 
         y_axis.transition().call(d3.axisLeft(y_scale))
 
         redraw_nintendo_line(line, data, x_scale, y_scale, parse_year, curve_type, 0)
@@ -422,6 +442,8 @@ async function init() {
 
     
 
+   
+    
     //defining tooltips
     const tooltip = d3.select("#chart")
         .append("div")
@@ -433,7 +455,9 @@ async function init() {
         .style("border-radius", "5px")
         .style("padding", "10px")
         .style("position","absolute");
-     
+
+
+
     
     
     const mouseover = function(event, d){
@@ -443,23 +467,27 @@ async function init() {
 
     const mouseleave = function(event, d){
         tooltip.transition()
-            .duration(200)
+            .duration(150)
             .style("opacity", 0);
     }
 
-    const mousemove_nintendo = function(event, d) {
-        tooltip.html(
-            `Sales: ${+d.Nintendo}`
-        )
-        .style("left", (d3.pointer(event)[0] + 90) + "px")
-        .style("top", (d3.pointer(event)[1] + "px")  );
-        
-        // console.log("x:" + (d3.pointer(event)[0] ));
-        // console.log("y:" + (d3.pointer(event)[1] ));
+   
 
-    }
 
     function draw_tooltip_markers(){
+
+        const mousemove_nintendo = function(event, d) {
+            tooltip.html(
+                `Sales: ${+d.Nintendo}`
+            )
+            .style("left", (d3.pointer(event)[0] + 90) + "px")
+            .style("top", (d3.pointer(event)[1] + "px")  );
+            
+            // console.log("x:" + (d3.pointer(event)[0] ));
+            // console.log("y:" + (d3.pointer(event)[1] ));
+    
+        }
+
         line.selectAll("points")
             .data(data)
             .enter()
@@ -472,6 +500,116 @@ async function init() {
             .on("mouseover", mouseover )
             .on("mousemove", mousemove_nintendo)
             .on("mouseleave", mouseleave );
+
+
+
+        const mousemove_other = function(event, d) {
+            tooltip.html(
+                `Sales: ${+d.Other}`
+            )
+            .style("left", (d3.pointer(event)[0] + 90) + "px")
+            .style("top", (d3.pointer(event)[1] + "px")  );
+            
+            // console.log("x:" + (d3.pointer(event)[0] ));
+            // console.log("y:" + (d3.pointer(event)[1] ));
+
+        }    
+        line.selectAll("points")
+            .data(data)
+            .enter()
+            .append("circle")
+            .attr("cx", function(d) { return x_scale(parse_year(d.Year)); })      
+            .attr("cy", function(d) { return y_scale(+d.Other); })    
+            .attr("r", marker_size*3)
+            .attr("class","other_tooltip_markers")
+            .style("opacity", 0.3)
+            .on("mouseover", mouseover )
+            .on("mousemove", mousemove_other)
+            .on("mouseleave", mouseleave );
+
+
+
+
+        const mousemove_sega = function(event, d) {
+            tooltip.html(
+                `Sales: ${+d.Sega}`
+            )
+            .style("left", (d3.pointer(event)[0] + 90) + "px")
+            .style("top", (d3.pointer(event)[1] + "px")  );
+            
+            // console.log("x:" + (d3.pointer(event)[0] ));
+            // console.log("y:" + (d3.pointer(event)[1] ));
+    
+        }
+
+        line.selectAll("points")
+            .data(data)
+            .enter()
+            .append("circle")
+            .attr("cx", function(d) { return x_scale(parse_year(d.Year)); })      
+            .attr("cy", function(d) { return y_scale(+d.Sega); })    
+            .attr("r", marker_size*3)
+            .attr("class","sega_tooltip_markers")
+            .style("opacity", 0.3)
+            .on("mouseover", mouseover )
+            .on("mousemove", mousemove_sega)
+            .on("mouseleave", mouseleave );
+
+
+
+            const mousemove_sony = function(event, d) {
+                tooltip.html(
+                    `Sales: ${+d.Sony}`
+                )
+                .style("left", (d3.pointer(event)[0] + 90) + "px")
+                .style("top", (d3.pointer(event)[1] + "px")  );
+                
+                // console.log("x:" + (d3.pointer(event)[0] ));
+                // console.log("y:" + (d3.pointer(event)[1] ));
+        
+            }
+    
+            line.selectAll("points")
+                .data(data)
+                .enter()
+                .append("circle")
+                .attr("cx", function(d) { return x_scale(parse_year(d.Year)); })      
+                .attr("cy", function(d) { return y_scale(+d.Sony); })    
+                .attr("r", marker_size*3)
+                .attr("class","sony_tooltip_markers")
+                .style("opacity", 0.3)
+                .on("mouseover", mouseover )
+                .on("mousemove", mousemove_sony)
+                .on("mouseleave", mouseleave );
+
+
+            const mousemove_xbox = function(event, d) {
+                tooltip.html(
+                    `Sales: ${+d.Xbox}`
+                )
+                .style("left", (d3.pointer(event)[0] + 90) + "px")
+                .style("top", (d3.pointer(event)[1] + "px")  );
+                
+                // console.log("x:" + (d3.pointer(event)[0] ));
+                // console.log("y:" + (d3.pointer(event)[1] ));
+        
+            }
+    
+            line.selectAll("points")
+                .data(data)
+                .enter()
+                .append("circle")
+                .attr("cx", function(d) { return x_scale(parse_year(d.Year)); })      
+                .attr("cy", function(d) { return y_scale(+d.Xbox); })    
+                .attr("r", marker_size*3)
+                .attr("class","xbox_tooltip_markers")
+                .style("opacity", 0.3)
+                .on("mouseover", mouseover )
+                .on("mousemove", mousemove_xbox)
+                .on("mouseleave", mouseleave );
+
+
+
     }    
     
     draw_tooltip_markers();
