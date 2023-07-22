@@ -32,6 +32,11 @@ function draw_lines(svg, data, x_scale, y_scale, parse_year, curve_type, marker_
         .attr("class","nintendo_markers")
         .style("opacity", 1);
 
+   
+
+
+    
+
 
     
     //adding Other line
@@ -176,6 +181,13 @@ function redraw_nintendo_line(line, data, x_scale, y_scale, parse_year, curve_ty
         .duration(duration)
         .attr("cx", function(d) { return x_scale(parse_year(d.Year)); })      
         .attr("cy", function(d) { return y_scale(+d.Nintendo); });
+    
+    line.selectAll(".nintendo_tooltip_markers")
+        .transition()
+        .duration(duration)
+        .attr("cx", function(d) { return x_scale(parse_year(d.Year)); })      
+        .attr("cy", function(d) { return y_scale(+d.Nintendo); });
+
 
     
 }
@@ -192,6 +204,12 @@ function redraw_other_line(line, data, x_scale, y_scale, parse_year, curve_type,
             .transition()
             .duration(duration)
             .attr("d", line_other(data));
+    
+    line.selectAll(".other_markers")
+        .transition()
+        .duration(duration)
+        .attr("cx", function(d) { return x_scale(parse_year(d.Year)); })      
+        .attr("cy", function(d) { return y_scale(+d.Other); });
     
     line.selectAll(".other_markers")
         .transition()
@@ -269,6 +287,8 @@ function redraw_xbox_line(line, data, x_scale, y_scale, parse_year, curve_type, 
 
 
 
+
+
 async function init() {
     
     //define width, height and margin variables
@@ -343,8 +363,9 @@ async function init() {
     // line variable; wiill containall of the lines that are created in the draw_lines function
     const line = svg.append('g')
       .attr("clip-path", "url(#clip)")
-
     
+  
+   
     draw_lines(line, data, x_scale, y_scale, parse_year, curve_type, marker_size);
 
     line.append("g")
@@ -400,12 +421,59 @@ async function init() {
 
 
     
+
     //defining tooltips
-    const tooltip = d3.select("body").append("div")
+    const tooltip = d3.select("#chart")
+        .append("div")
         .attr("class", "tooltip")
         .style("opacity", 0)
-        .style("position", "absolute");
-        
+        .style("background-color", "white")
+        .style("border", "solid")
+        .style("border-width", "1px")
+        .style("border-radius", "5px")
+        .style("padding", "10px")
+        .style("position","absolute");
+     
     
+    
+    const mouseover = function(event, d){
+        tooltip.style("opacity", 1);
+    
+    }
+
+    const mouseleave = function(event, d){
+        tooltip.transition()
+            .duration(200)
+            .style("opacity", 0);
+    }
+
+    const mousemove_nintendo = function(event, d) {
+        tooltip.html(
+            `Sales: ${+d.Nintendo}`
+        )
+        .style("left", (d3.pointer(event)[0] + 90) + "px")
+        .style("top", (d3.pointer(event)[1] + "px")  );
+        
+        // console.log("x:" + (d3.pointer(event)[0] ));
+        // console.log("y:" + (d3.pointer(event)[1] ));
+
+    }
+
+    function draw_tooltip_markers(){
+        line.selectAll("points")
+            .data(data)
+            .enter()
+            .append("circle")
+            .attr("cx", function(d) { return x_scale(parse_year(d.Year)); })      
+            .attr("cy", function(d) { return y_scale(+d.Nintendo); })    
+            .attr("r", marker_size*3)
+            .attr("class","nintendo_tooltip_markers")
+            .style("opacity", 0.3)
+            .on("mouseover", mouseover )
+            .on("mousemove", mousemove_nintendo)
+            .on("mouseleave", mouseleave );
+    }    
+    
+    draw_tooltip_markers();
 
 }

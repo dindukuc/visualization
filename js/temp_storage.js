@@ -1,19 +1,3 @@
-
-
-
-
-
-line.selectAll("points")
-.data(data)
-.enter()
-.append("circle")
-.attr("cx", function(d) { return x_scale(parse_year(d.Year)); })      
-.attr("cy", function(d) { return y_scale(+d.Sony); })    
-.attr("r", 1)
-.attr("class","point")
-.style("opacity", 1);
-
-
 //hover on tooptip points
 line.selectAll("points")
 .data(data)
