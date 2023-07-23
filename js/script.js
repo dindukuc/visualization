@@ -303,11 +303,7 @@ function redraw_xbox_line(line, data, x_scale, y_scale, parse_year, curve_type, 
 
 }
 
-
-
-
-
-async function init() {
+async function create_viz(data_file_name) {
     
     //define width, height and margin variables
     const width = 1440
@@ -319,7 +315,7 @@ async function init() {
     //add border for debugging; might change it later if needed
     d3.select('#chart').style("border", "2px solid black");
 
-    const data = await d3.csv("js/data/videogames_total_sales_per_year.csv");   
+    const data = await d3.csv(data_file_name);   
     console.log(data);  //checking to see if the data is being read in properly
 
     //defining the svg element that will be added into the overall svg element
@@ -346,7 +342,7 @@ async function init() {
     //create y_scale
     var y_scale = d3.scaleLinear()
         .domain([
-            0, 350   //d3.max(data, d => d3.max([+d.Nintendo, +d.Other, +d.PC, +d.Sega, +d.Sony, +d.Xbox])) 
+            0, d3.max(data, d => d3.max([+d.Nintendo, +d.Other, +d.PC, +d.Sega, +d.Sony, +d.Xbox])) 
             //changed domain -- maybe make it a variable later
         ])
         .range([height, 0]);
@@ -406,7 +402,7 @@ async function init() {
         if(!extent){
           if (!idleTimeout) return idleTimeout = setTimeout(idled, 350); // This allows to wait a little bit
           x_scale.domain(d3.extent(data, d => parse_year(d.Year)))
-          y_scale.domain([ 0, 350 ]) //changed domain -- maybe make it a variable later
+          y_scale.domain([ 0, d3.max(data, d => d3.max([+d.Nintendo, +d.Other, +d.PC, +d.Sega, +d.Sony, +d.Xbox])) ]) //changed domain -- maybe make it a variable later
         }else{
           x_scale.domain([ x_scale.invert(extent[0][0]), x_scale.invert(extent[1][0]) ])
           y_scale.domain([ y_scale.invert(extent[1][1]), y_scale.invert(extent[0][1]) ])
@@ -429,7 +425,7 @@ async function init() {
         x_scale.domain(d3.extent(data, d => parse_year(d.Year)))
         x_axis.transition().duration(1000).call(d3.axisBottom(x_scale))
         
-        y_scale.domain([ 0, 350]) //d3.max(data, d => d3.max([+d.Nintendo, +d.Other, +d.PC, +d.Sega, +d.Sony, +d.Xbox])) 
+        y_scale.domain([ 0, d3.max(data, d => d3.max([+d.Nintendo, +d.Other, +d.PC, +d.Sega, +d.Sony, +d.Xbox])) ])  
         y_axis.transition().duration(1000).call(d3.axisLeft(y_scale))
 
         redraw_nintendo_line(line, data, x_scale, y_scale, parse_year, curve_type, 1000)
@@ -615,3 +611,13 @@ async function init() {
     draw_tooltip_markers();
 
 }
+
+async function update_viz(data_file_name){
+    d3.select("#chart").html('')
+    await create_viz(data_file_name);
+}
+
+
+const  total_data_file_name = "js/data/videogames_total_sales_per_year.csv"
+const  avg_data_file_name = "js/data/videogames_average_sales_per_year.csv"
+const  max_data_file_name = "js/data/videogames_max_sales_per_year.csv"
