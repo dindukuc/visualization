@@ -519,7 +519,7 @@ async function create_viz(data_file_name) {
    
     
     //defining tooltips
-    const tooltip = d3.select("body")
+    const tooltip = d3.select("#chart")
         .append("div")
         .attr("class", "tooltip")
         .style("opacity", 0)
@@ -535,14 +535,16 @@ async function create_viz(data_file_name) {
     
     
     const mouseover = function(event, d){
-        tooltip.style("opacity", 1);
+        tooltip.style("opacity", 1).style("display", "block");
+        // console.log(tooltip.style("display"))
     
     }
 
     const mouseleave = function(event, d){
         tooltip.transition()
             .duration(150)
-            .style("opacity", 0);
+            .style("opacity", 0)
+            .style("display", "none");
     }
 
    
