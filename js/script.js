@@ -308,6 +308,8 @@ async function create_viz(data_file_name) {
     //define width, height and margin variables
     const width = 1440
     const height = 800
+    const canvas_width = 1870
+    const canvas_height = 900
     const margin = ({top: 20, right: 30, bottom: 30, left: 40})
     const curve_type = d3.curveMonotoneX; //change curve types
     const marker_size = 2; //change marker size on points
@@ -320,10 +322,10 @@ async function create_viz(data_file_name) {
 
     //defining the svg element that will be added into the overall svg element
     const svg = d3.select("#chart")
-    .append("svg")
+    .insert("svg", ":first-child")
       .attr("id", "canvas")
-      .attr("width", width + margin.left + margin.right)
-      .attr("height", height + margin.top + margin.bottom)
+      .attr("width", canvas_width + margin.left + margin.right)
+      .attr("height", canvas_height + margin.top + margin.bottom)
     .append("g")
       .attr("transform", `translate(${margin.left},${margin.top})`);
     
@@ -442,7 +444,7 @@ async function create_viz(data_file_name) {
    
     
     //defining tooltips
-    const tooltip = d3.select("#chart")
+    const tooltip = d3.select("body")
         .append("div")
         .attr("class", "tooltip")
         .style("opacity", 0)
@@ -737,14 +739,36 @@ async function create_viz(data_file_name) {
     const sony_checkbox = d3.select("#sony_checkbox").on("click", hide_sony_line);
     const xbox_checkbox = d3.select("#xbox_checkbox").on("click", hide_xbox_line);
     const other_checkbox = d3.select("#other_checkbox").on("click", hide_other_line);
+        
+   const legend = d3.select("#canvas")
+    .selectAll("g.legend")
+    .data(data)
+    .enter()
+    .append("g")
+        .attr("class", "legend");
+
+    legend.append("circle")
+            .attr("cx", 1550)
+            .attr('cy', 400)
+            .attr("r", 8)
+            .style("fill", "#e4000f")
     
+    legend.append("text")
+    .attr("x", 1560)
+    .attr("y", 405)
+    .text("Nintendo");
+
+
+    // var columns = data.columns.slice(1);
+
+
 
 
 }
 
 async function update_viz(data_file_name){
     d3.select("#chart").html('');
-    create_viz(data_file_name);
+    await create_viz(data_file_name);
 }
 
 
