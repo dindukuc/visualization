@@ -315,7 +315,7 @@ async function create_viz(data_file_name) {
     //add border for debugging; might change it later if needed
     d3.select('#chart').style("border", "2px solid black");
 
-    const data = await d3.csv(data_file_name);   
+    const data = await d3.csv(data_file_name+'?' + Math.floor(Math.random() * 1000));  //random stuff added so the browser doesn't cache csv files
     console.log(data);  //checking to see if the data is being read in properly
 
     //defining the svg element that will be added into the overall svg element
@@ -613,8 +613,8 @@ async function create_viz(data_file_name) {
 }
 
 async function update_viz(data_file_name){
-    d3.select("#chart").html('')
-    await create_viz(data_file_name);
+    d3.select("#chart").html('');
+    create_viz(data_file_name);
 }
 
 
