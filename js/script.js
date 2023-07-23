@@ -315,12 +315,13 @@ async function create_viz(data_file_name) {
     //add border for debugging; might change it later if needed
     d3.select('#chart').style("border", "2px solid black");
 
-    const data = await d3.csv(data_file_name+'?' + Math.floor(Math.random() * 1000));  //random stuff added so the browser doesn't cache csv files
+    const data = await d3.csv(data_file_name +'?' + Math.floor(Math.random() * 1000));  //random stuff added so the browser doesn't cache csv files
     console.log(data);  //checking to see if the data is being read in properly
 
     //defining the svg element that will be added into the overall svg element
     const svg = d3.select("#chart")
     .append("svg")
+      .attr("id", "canvas")
       .attr("width", width + margin.left + margin.right)
       .attr("height", height + margin.top + margin.bottom)
     .append("g")
@@ -609,6 +610,63 @@ async function create_viz(data_file_name) {
     }    
     
     draw_tooltip_markers();
+    
+
+    function hide_nintendo_line(){
+        if(d3.select(this).property("checked")){
+            
+            d3.select('#nintendo_line')
+                .style("opacity", 1);
+            
+            d3.selectAll(".nintendo_markers")
+              .attr("r", marker_size);
+            
+            d3.selectAll(".nintendo_tooltip_markers")
+              .attr("r", 3*marker_size);
+        }
+        else{
+            d3.select('#nintendo_line')
+                .style("opacity", 0);
+            
+            d3.selectAll(".nintendo_markers")
+              .attr("r", 0);
+            
+            d3.selectAll(".nintendo_tooltip_markers")
+              .attr("r", 0);
+        }
+    }
+
+    function hide_sega_line(){
+        if(d3.select(this).property("checked")){
+            
+            d3.select('#sega_line')
+                .style("opacity", 1);
+            
+            d3.selectAll(".sega_markers")
+              .attr("r", marker_size);
+            
+            d3.selectAll(".sega_tooltip_markers")
+              .attr("r", 3*marker_size);
+        }
+        else{
+            d3.select('#sega_line')
+                .style("opacity", 0);
+            
+            d3.selectAll(".sega_markers")
+              .attr("r", 0);
+            
+            d3.selectAll(".sega_tooltip_markers")
+              .attr("r", 0);
+        }
+    }
+
+    const nintendo_checkbox = d3.select("#nintendo_checkbox").on("click", hide_nintendo_line);
+    const sega_checkbox = d3.select("#sega_checkbox").on("click", hide_sega_line);
+    const sony_checkbox = d3.select("#nintendo_checkbox").on("click", hide_sony_line);
+    const xbox_checkbox = d3.select("#sega_checkbox").on("click", hide_xbox_line);
+    const other_checkbox = d3.select("#sega_checkbox").on("click", hide_other_line);
+    
+
 
 }
 
