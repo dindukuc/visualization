@@ -660,11 +660,83 @@ async function create_viz(data_file_name) {
         }
     }
 
+    function hide_sony_line(){
+        if(d3.select(this).property("checked")){
+            
+            d3.select('#sony_line')
+                .style("opacity", 1);
+            
+            d3.selectAll(".sony_markers")
+              .attr("r", marker_size);
+            
+            d3.selectAll(".sony_tooltip_markers")
+              .attr("r", 3*marker_size);
+        }
+        else{
+            d3.select('#sony_line')
+                .style("opacity", 0);
+            
+            d3.selectAll(".sony_markers")
+              .attr("r", 0);
+            
+            d3.selectAll(".sony_tooltip_markers")
+              .attr("r", 0);
+        }
+    }
+
+    function hide_xbox_line(){
+        if(d3.select(this).property("checked")){
+            
+            d3.select('#xbox_line')
+                .style("opacity", 1);
+            
+            d3.selectAll(".xbox_markers")
+              .attr("r", marker_size);
+            
+            d3.selectAll(".xbox_tooltip_markers")
+              .attr("r", 3*marker_size);
+        }
+        else{
+            d3.select('#xbox_line')
+                .style("opacity", 0);
+            
+            d3.selectAll(".xbox_markers")
+              .attr("r", 0);
+            
+            d3.selectAll(".xbox_tooltip_markers")
+              .attr("r", 0);
+        }
+    }
+
+    function hide_other_line(){
+        if(d3.select(this).property("checked")){
+            
+            d3.select('#other_line')
+                .style("opacity", 1);
+            
+            d3.selectAll(".other_markers")
+              .attr("r", marker_size);
+            
+            d3.selectAll(".other_tooltip_markers")
+              .attr("r", 3*marker_size);
+        }
+        else{
+            d3.select('#other_line')
+                .style("opacity", 0);
+            
+            d3.selectAll(".other_markers")
+              .attr("r", 0);
+            
+            d3.selectAll(".other_tooltip_markers")
+              .attr("r", 0);
+        }
+    }
+
     const nintendo_checkbox = d3.select("#nintendo_checkbox").on("click", hide_nintendo_line);
     const sega_checkbox = d3.select("#sega_checkbox").on("click", hide_sega_line);
-    const sony_checkbox = d3.select("#nintendo_checkbox").on("click", hide_sony_line);
-    const xbox_checkbox = d3.select("#sega_checkbox").on("click", hide_xbox_line);
-    const other_checkbox = d3.select("#sega_checkbox").on("click", hide_other_line);
+    const sony_checkbox = d3.select("#sony_checkbox").on("click", hide_sony_line);
+    const xbox_checkbox = d3.select("#xbox_checkbox").on("click", hide_xbox_line);
+    const other_checkbox = d3.select("#other_checkbox").on("click", hide_other_line);
     
 
 
