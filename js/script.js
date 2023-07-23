@@ -321,7 +321,7 @@ function create_legend(data){
     
     const legend = d3.select("#canvas")
         .selectAll("g.legend")
-        .data(data)
+        .data(keys)
         .enter()
         .append("g")
             .attr("class", "legend")
@@ -331,7 +331,7 @@ function create_legend(data){
 
 
 
-    legend.selectAll("g.legend")
+    legend.select(".legend")
     .data(keys)
     .enter()
     .append("rect")
@@ -341,7 +341,7 @@ function create_legend(data){
         .attr("y", function(d, i){return start_y + i*20})
         .attr("fill", function(d, i){return colors[i]});
 
-    legend.selectAll("g.legend")
+    legend.select(".legend")
         .data(keys)
         .enter()
         .append("text")
@@ -384,8 +384,8 @@ async function create_viz(data_file_name) {
     const width = 1440
     const height = 800
     const canvas_width = 1870
-    const canvas_height = 900
-    const margin = ({top: 20, right: 30, bottom: 30, left: 40})
+    const canvas_height = 840
+    const margin = ({top: 20, right: 30, bottom: 30, left: 100})
     const curve_type = d3.curveMonotoneX; //change curve types
     const marker_size = 2; //change marker size on points
 
@@ -552,7 +552,7 @@ async function create_viz(data_file_name) {
 
         const mousemove_nintendo = function(event, d) {
             tooltip.html(
-                `Sales: ${+d.Nintendo}`
+                `Sales: $${+d.Nintendo} Million`
             )
             .style("left", (d3.pointer(event)[0] + 90) + "px")
             .style("top", (d3.pointer(event)[1] + "px")  );
@@ -579,7 +579,7 @@ async function create_viz(data_file_name) {
 
         const mousemove_other = function(event, d) {
             tooltip.html(
-                `Sales: ${+d.Other}`
+                `Sales: $${+d.Other} Million`
             )
             .style("left", (d3.pointer(event)[0] + 90) + "px")
             .style("top", (d3.pointer(event)[1] + "px")  );
@@ -606,7 +606,7 @@ async function create_viz(data_file_name) {
 
         const mousemove_sega = function(event, d) {
             tooltip.html(
-                `Sales: ${+d.Sega}`
+                `Sales: $${+d.Sega} Million`
             )
             .style("left", (d3.pointer(event)[0] + 90) + "px")
             .style("top", (d3.pointer(event)[1] + "px")  );
@@ -633,7 +633,7 @@ async function create_viz(data_file_name) {
 
             const mousemove_sony = function(event, d) {
                 tooltip.html(
-                    `Sales: ${+d.Sony}`
+                    `Sales: $${+d.Sony} Million`
                 )
                 .style("left", (d3.pointer(event)[0] + 90) + "px")
                 .style("top", (d3.pointer(event)[1] + "px")  );
@@ -659,7 +659,7 @@ async function create_viz(data_file_name) {
 
             const mousemove_xbox = function(event, d) {
                 tooltip.html(
-                    `Sales: ${+d.Xbox}`
+                    `Sales: $${+d.Xbox} Million`
                 )
                 .style("left", (d3.pointer(event)[0] + 90) + "px")
                 .style("top", (d3.pointer(event)[1] + "px")  );
@@ -819,16 +819,42 @@ async function create_viz(data_file_name) {
 
 
     create_legend(data);
-    // var columns = data.columns.slice(1);
 
+    //add axis labels and such
 
+    svg.append("text")
+        .text("Year")
+        .attr("x", width/2 + margin.left/2 - 4)
+        .attr("y", height + margin.bottom + margin.top)
+        .attr("text-anchor", "end")
+        .attr("class", "axis_label")
+        .attr("id", "x_axis_label");
 
+    svg.append("text")
+        .text("Sales (Millions of US $)")
+        .attr("transform", 'rotate(-90)')
+        .attr("x", -(height/2)+margin.top+margin.bottom )
+        .attr("y", -50)
+        .attr("text-anchor", "end")
+        .attr("class", "axis_label")
+        .attr("id", "y_axis_label");
 
 }
 
 async function update_viz(data_file_name){
     d3.select("#chart").html('');
     await create_viz(data_file_name);
+
+
+    d3.select("svg")
+        .append("text")
+        .attr("x", 485)
+        .attr("y", 100)
+        .attr("text-anchor", "middle")
+        .text(data_file_name);
+
+    
+
 }
 
 
