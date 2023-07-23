@@ -376,8 +376,6 @@ function create_legend(data){
 
 }
 
-
-
 async function create_viz(data_file_name) {
     
     //define width, height and margin variables
