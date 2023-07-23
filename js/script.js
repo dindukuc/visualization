@@ -303,6 +303,81 @@ function redraw_xbox_line(line, data, x_scale, y_scale, parse_year, curve_type, 
 
 }
 
+function create_legend(data){
+
+    const size = 12;
+    const start_x = 1545;
+    const start_y = 394;
+    const colors = ["#e4000f", "orange", "blue", "green", "gray"];
+    var keys = data.columns.slice(1);
+    const pc_index = keys.indexOf("PC");
+    const other_index = keys.indexOf("Other");
+    keys.splice(pc_index, 1);
+    
+    keys.push(keys.splice(other_index, 1)[0]);
+
+    // console.log(keys);
+    
+    
+    const legend = d3.select("#canvas")
+        .selectAll("g.legend")
+        .data(data)
+        .enter()
+        .append("g")
+            .attr("class", "legend")
+            .attr("border", "2px solid black");
+
+
+
+
+
+    legend.selectAll("g.legend")
+    .data(keys)
+    .enter()
+    .append("rect")
+        .attr("width", size)
+        .attr("height", size)
+        .attr("x", start_x)
+        .attr("y", function(d, i){return start_y + i*20})
+        .attr("fill", function(d, i){return colors[i]});
+
+    legend.selectAll("g.legend")
+        .data(keys)
+        .enter()
+        .append("text")
+            .attr("x", start_x + 15)
+            .attr("y", function(d, i){return start_y + 7 + i*20})
+            .text(function(d){return d})
+            .attr("fill", function(d, i){return colors[i]})
+            .attr("text-anchor", "left")
+            .style("alignment-baseline", "middle")
+            .attr("class", "legend_text");          
+
+      
+    // legend.append("text")
+    //     .attr("x", 1560)
+    //     .attr("y", 405)
+    //     .text("Nintendo");
+
+
+    // legend.append("rect")
+    //     .attr("x", 1545)
+    //     .attr('y', 414)
+    //     .attr("width", 12)
+    //     .attr("height", 12)
+    //     .style("fill", "#e4000f")
+    
+    // legend.append("text")
+    //     .attr("x", 1560)
+    //     .attr("y", 415)
+    //     .text("Sony");
+    
+
+
+}
+
+
+
 async function create_viz(data_file_name) {
     
     //define width, height and margin variables
@@ -734,31 +809,16 @@ async function create_viz(data_file_name) {
         }
     }
 
+
     const nintendo_checkbox = d3.select("#nintendo_checkbox").on("click", hide_nintendo_line);
     const sega_checkbox = d3.select("#sega_checkbox").on("click", hide_sega_line);
     const sony_checkbox = d3.select("#sony_checkbox").on("click", hide_sony_line);
     const xbox_checkbox = d3.select("#xbox_checkbox").on("click", hide_xbox_line);
     const other_checkbox = d3.select("#other_checkbox").on("click", hide_other_line);
         
-   const legend = d3.select("#canvas")
-    .selectAll("g.legend")
-    .data(data)
-    .enter()
-    .append("g")
-        .attr("class", "legend");
-
-    legend.append("circle")
-            .attr("cx", 1550)
-            .attr('cy', 400)
-            .attr("r", 8)
-            .style("fill", "#e4000f")
-    
-    legend.append("text")
-    .attr("x", 1560)
-    .attr("y", 405)
-    .text("Nintendo");
 
 
+    create_legend(data);
     // var columns = data.columns.slice(1);
 
 
