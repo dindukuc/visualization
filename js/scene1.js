@@ -473,52 +473,6 @@ async function create_viz(data_file_name) {
     //     .call(brush); //calling brush function on line
     
 
-    // sets idleTimeOut to null
-    let idleTimeout
-    function idled() { idleTimeout = null; }
-
-    function updateChart(event,d) {
-
-        // get selected boundaries
-        extent = event.selection
-    
-        // If no selection, back to initial coordinate; Otherwise, updates the X axis domain
-        if(!extent){
-          if (!idleTimeout) return idleTimeout = setTimeout(idled, 350); // This allows to wait a little bit
-          x_scale.domain(d3.extent(data, d => parse_year(d.Year)))
-          y_scale.domain([ 0, d3.max(data, d => d3.max([+d.Nintendo, +d.Other, +d.PC, +d.Sega, +d.Sony, +d.Xbox])) ]) //changed domain -- maybe make it a variable later
-        }else{
-          x_scale.domain([ x_scale.invert(extent[0][0]), x_scale.invert(extent[1][0]) ])
-          y_scale.domain([ y_scale.invert(extent[1][1]), y_scale.invert(extent[0][1]) ]).nice()
-          line.select(".brush").call(brush.move, null) // This remove the grey brush area as soon as the selection has been done
-        }
-        
-        // Update axis and line position
-        x_axis.transition().duration(1000).call(d3.axisBottom(x_scale))
-        y_axis.transition().duration(1000).call(d3.axisLeft(y_scale))
-        redraw_nintendo_line(line, data, x_scale, y_scale, parse_year, curve_type, 1000)
-        redraw_other_line(line, data, x_scale, y_scale, parse_year, curve_type, 1000)
-        redraw_sega_line(line, data, x_scale, y_scale, parse_year, curve_type, 1000)
-        redraw_sony_line(line, data, x_scale, y_scale, parse_year, curve_type, 1000)
-        redraw_xbox_line(line, data, x_scale, y_scale, parse_year, curve_type, 1000)
-    }
-
-
-
-    svg.on("dblclick",function(){
-        x_scale.domain(d3.extent(data, d => parse_year(d.Year)))
-        x_axis.transition().duration(1000).call(d3.axisBottom(x_scale))
-        
-        y_scale.domain([ 0, d3.max(data, d => d3.max([+d.Nintendo, +d.Other, +d.PC, +d.Sega, +d.Sony, +d.Xbox])) ]).nice()  
-        y_axis.transition().duration(1000).call(d3.axisLeft(y_scale))
-
-        redraw_nintendo_line(line, data, x_scale, y_scale, parse_year, curve_type, 1000)
-        redraw_other_line(line, data, x_scale, y_scale, parse_year, curve_type, 1000)
-        redraw_sega_line(line, data, x_scale, y_scale, parse_year, curve_type, 1000)
-        redraw_sony_line(line, data, x_scale, y_scale, parse_year, curve_type, 1000)
-        redraw_xbox_line(line, data, x_scale, y_scale, parse_year, curve_type, 1000)
-      });
-
 
     
 
@@ -540,29 +494,23 @@ async function create_viz(data_file_name) {
 
     
     
-    const mouseover = function(event, d){
+    const mouseover = function(d){
         tooltip.style("opacity", 1).style("display", "block");
         // console.log(tooltip.style("display"))
     
     }
 
-    const mouseleave = function(event, d){
+    const mouseleave = function(d){
         tooltip.transition()
             .duration(150)
             .style("opacity", 0)
             .style("display", "none");
     }
 
-//    var line_value = "";
-
-//    if(){
-
-//    }
-
 
     function draw_tooltip_markers(){
 
-        const mousemove_nintendo = function(event, d) {
+        const mousemove_nintendo = function(d) {
             tooltip.html(
                 `Year: ${+d.Year} <br> 
                 Sales: $${+d.Nintendo} Million <br>
@@ -570,8 +518,8 @@ async function create_viz(data_file_name) {
                 Platform: ${read_top_game(d.Nintendo_top)[1]} <br>
                 `
             )
-            .style("left", (d3.pointer(event)[0] + 140) + "px")
-            .style("top", (d3.pointer(event)[1] + "px")  );
+            .style("left", (d3.event.pageX + 25) + "px")
+            .style("top", (d3.event.pageY + "px")  );
             
             // console.log("x:" + (d3.pointer(event)[0] ));
             // console.log("y:" + (d3.pointer(event)[1] ));
@@ -593,7 +541,7 @@ async function create_viz(data_file_name) {
 
 
 
-        const mousemove_other = function(event, d) {
+        const mousemove_other = function(d) {
             tooltip.html(
                 `Year: ${+d.Year} <br> 
                 Sales: $${+d.Other} Million <br>
@@ -601,8 +549,8 @@ async function create_viz(data_file_name) {
                 Platform: ${read_top_game(d.Other_top)[1]} <br>
                 `
             )
-            .style("left", (d3.pointer(event)[0] + 140) + "px")
-            .style("top", (d3.pointer(event)[1] + "px")  );
+            .style("left", (d3.event.pageX + 25) + "px")
+            .style("top", (d3.event.pageY + "px")  );
             
             // console.log("x:" + (d3.pointer(event)[0] ));
             // console.log("y:" + (d3.pointer(event)[1] ));
@@ -624,7 +572,7 @@ async function create_viz(data_file_name) {
 
 
 
-        const mousemove_sega = function(event, d) {
+        const mousemove_sega = function(d) {
             tooltip.html(
                 `Year: ${+d.Year} <br> 
                 Sales: $${+d.Sega} Million <br>
@@ -632,8 +580,8 @@ async function create_viz(data_file_name) {
                 Platform: ${read_top_game(d.Sega_top)[1]} <br>
                 `
             )
-            .style("left", (d3.pointer(event)[0] + 140) + "px")
-            .style("top", (d3.pointer(event)[1] + "px")  );
+            .style("left", (d3.event.pageX + 25) + "px")
+            .style("top", (d3.event.pageY + "px")  );
             
             // console.log("x:" + (d3.pointer(event)[0] ));
             // console.log("y:" + (d3.pointer(event)[1] ));
@@ -655,7 +603,7 @@ async function create_viz(data_file_name) {
 
 
 
-            const mousemove_sony = function(event, d) {
+            const mousemove_sony = function(d) {
                 tooltip.html(
                    `Year: ${+d.Year} <br> 
                     Sales: $${+d.Sony} Million <br>
@@ -663,9 +611,8 @@ async function create_viz(data_file_name) {
                     Platform: ${read_top_game(d.Sony_top)[1]} <br>
                     `
                 )
-                .style("left", (d3.pointer(event)[0] + 140) + "px")
-                .style("top", (d3.pointer(event)[1] + "px")  );
-                
+                .style("left", (d3.event.pageX + 25) + "px")
+                .style("top", (d3.event.pageY + "px")  );
                 // console.log("x:" + (d3.pointer(event)[0] ));
                 // console.log("y:" + (d3.pointer(event)[1] ));
         
@@ -685,7 +632,7 @@ async function create_viz(data_file_name) {
                 .on("mouseleave", mouseleave );
 
 
-            const mousemove_xbox = function(event, d) {
+            const mousemove_xbox = function(d) {
                 tooltip.html(
                    `Year: ${+d.Year} <br> 
                     Sales: $${+d.Xbox} Million <br>
@@ -693,9 +640,8 @@ async function create_viz(data_file_name) {
                     Platform: ${read_top_game(d.Xbox_top)[1]} <br>
                     `
                 )
-                .style("left", (d3.pointer(event)[0] + 140) + "px")
-                .style("top", (d3.pointer(event)[1] + "px")  );
-                
+                .style("left", (d3.event.pageX + 25) + "px")
+                .style("top", (d3.event.pageY + "px")  );
                 // console.log("x:" + (d3.pointer(event)[0] ));
                 // console.log("y:" + (d3.pointer(event)[1] ));
         
@@ -872,7 +818,7 @@ async function create_viz(data_file_name) {
         .attr("id", "y_axis_label");
 
 
-
+        const timeFormat = d3.timeFormat("%Y")
         const type = d3.annotationCalloutElbow
 
         const annotations = [{
@@ -881,13 +827,14 @@ async function create_viz(data_file_name) {
             title: "Annotations :)"
           },
           //can use x, y directly instead of data
-          data: { Year: 2009, Nintendo: 326.54 },
+          data: { Year: 2009, sales: 326.54 },
           dy: 137,
-          dx: 162
+          dx: 200
         }]
                       
-        const makeAnnotations = d3.annotation()
-          .editMode(true)
+          
+          const makeAnnotations = d3.annotation().annotations(annotations)
+          .editMode(false)
           //also can set and override in the note.padding property
           //of the annotation object
           .notePadding(15)
@@ -895,20 +842,21 @@ async function create_viz(data_file_name) {
           //accessors & accessorsInverse not needed
           //if using x, y in annotations JSON
           .accessors({
-            x: d => x_scale(parse_year(d.Year)),
-            y: d => y_scale(d.Nintendo)
+            x: d => x_scale(parse_year(+d.Year)),
+            y: d => y_scale(+d.sales)
           })
           .accessorsInverse({
              Year: d => timeFormat(x_scale.invert(d.x)),
-             Nintendo: d => y_scale.invert(d.y)
-          })
-          .annotations(annotations)
+             sales: d => y_scale.invert(d.y)
+          });
         
-        d3.select("svg")
-          .append("g")
+        svg.append("g")
           .attr("class", "annotation-group")
           .call(makeAnnotations)
+        
+        // const annotate = d3.select(".annotation callout elbow");
 
+        // const test_data = { Year: 2009, sales: 326.54 };
 
 
 }
