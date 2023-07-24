@@ -313,10 +313,11 @@ function create_legend(data){
     const pc_index = keys.indexOf("PC");
     const other_index = keys.indexOf("Other");
     keys.splice(pc_index, 1);
-    
+    keys.splice(5,6);//removing top game columns
+
     keys.push(keys.splice(other_index, 1)[0]);
 
-    // console.log(keys);
+    console.log(keys);
     
     
     const legend = d3.select("#canvas")
@@ -376,6 +377,11 @@ function create_legend(data){
 
 }
 
+function read_top_game(game_str){
+    return game_str.split(";");
+}
+
+
 async function create_viz(data_file_name) {
     
     //define width, height and margin variables
@@ -391,9 +397,9 @@ async function create_viz(data_file_name) {
     d3.select('#chart').style("border", "2px solid black");
 
     const data = await d3.csv(data_file_name +'?' + Math.floor(Math.random() * 1000));  //random stuff added so the browser doesn't cache csv files
-    const test_data = await d3.csv("js/data/test.csv" +'?' + Math.floor(Math.random() * 1000));
+    // const test_data = await d3.csv("js/data/test.csv" +'?' + Math.floor(Math.random() * 1000));
     console.log(data);  //checking to see if the data is being read in properly
-    console.log(test_data);
+    // console.log(test_data);
 
     //defining the svg element that will be added into the overall svg element
     const svg = d3.select("#chart")
@@ -547,16 +553,24 @@ async function create_viz(data_file_name) {
             .style("display", "none");
     }
 
-   
+//    var line_value = "";
+
+//    if(){
+
+//    }
 
 
     function draw_tooltip_markers(){
 
         const mousemove_nintendo = function(event, d) {
             tooltip.html(
-                `Sales: $${+d.Nintendo} Million`
+                `Year: ${+d.Year} <br> 
+                Sales: $${+d.Nintendo} Million <br>
+                Top Game: ${read_top_game(d.Nintendo_top)[0]} <br>
+                Platform: ${read_top_game(d.Nintendo_top)[1]} <br>
+                `
             )
-            .style("left", (d3.pointer(event)[0] + 120) + "px")
+            .style("left", (d3.pointer(event)[0] + 140) + "px")
             .style("top", (d3.pointer(event)[1] + "px")  );
             
             // console.log("x:" + (d3.pointer(event)[0] ));
@@ -581,9 +595,13 @@ async function create_viz(data_file_name) {
 
         const mousemove_other = function(event, d) {
             tooltip.html(
-                `Sales: $${+d.Other} Million`
+                `Year: ${+d.Year} <br> 
+                Sales: $${+d.Other} Million <br>
+                Top Game: ${read_top_game(d.Other_top)[0]} <br>
+                Platform: ${read_top_game(d.Other_top)[1]} <br>
+                `
             )
-            .style("left", (d3.pointer(event)[0] + 90) + "px")
+            .style("left", (d3.pointer(event)[0] + 140) + "px")
             .style("top", (d3.pointer(event)[1] + "px")  );
             
             // console.log("x:" + (d3.pointer(event)[0] ));
@@ -608,9 +626,13 @@ async function create_viz(data_file_name) {
 
         const mousemove_sega = function(event, d) {
             tooltip.html(
-                `Sales: $${+d.Sega} Million`
+                `Year: ${+d.Year} <br> 
+                Sales: $${+d.Sega} Million <br>
+                Top Game: ${read_top_game(d.Sega_top)[0]} <br>
+                Platform: ${read_top_game(d.Sega_top)[1]} <br>
+                `
             )
-            .style("left", (d3.pointer(event)[0] + 90) + "px")
+            .style("left", (d3.pointer(event)[0] + 140) + "px")
             .style("top", (d3.pointer(event)[1] + "px")  );
             
             // console.log("x:" + (d3.pointer(event)[0] ));
@@ -635,9 +657,13 @@ async function create_viz(data_file_name) {
 
             const mousemove_sony = function(event, d) {
                 tooltip.html(
-                    `Sales: $${+d.Sony} Million`
+                   `Year: ${+d.Year} <br> 
+                    Sales: $${+d.Sony} Million <br>
+                    Top Game: ${read_top_game(d.Sony_top)[0]} <br>
+                    Platform: ${read_top_game(d.Sony_top)[1]} <br>
+                    `
                 )
-                .style("left", (d3.pointer(event)[0] + 90) + "px")
+                .style("left", (d3.pointer(event)[0] + 140) + "px")
                 .style("top", (d3.pointer(event)[1] + "px")  );
                 
                 // console.log("x:" + (d3.pointer(event)[0] ));
@@ -661,9 +687,13 @@ async function create_viz(data_file_name) {
 
             const mousemove_xbox = function(event, d) {
                 tooltip.html(
-                    `Sales: $${+d.Xbox} Million`
+                   `Year: ${+d.Year} <br> 
+                    Sales: $${+d.Xbox} Million <br>
+                    Top Game: ${read_top_game(d.Xbox_top)[0]} <br>
+                    Platform: ${read_top_game(d.Xbox_top)[1]} <br>
+                    `
                 )
-                .style("left", (d3.pointer(event)[0] + 90) + "px")
+                .style("left", (d3.pointer(event)[0] + 140) + "px")
                 .style("top", (d3.pointer(event)[1] + "px")  );
                 
                 // console.log("x:" + (d3.pointer(event)[0] ));

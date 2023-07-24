@@ -1,40 +1,40 @@
-Year,Nintendo,Other,PC,Sega,Sony,Xbox
-1980,0,11.38,0,0,0,0
-1981,0,35.77,0,0,0,0
-1982,0,28.86,0,0,0,0
-1983,10.96,5.83,0,0,0,0
-1984,50.09,0.27,0,0,0,0
-1985,53.46,0.45,0.03,0,0,0
-1986,36.41,0.66,0,0,0,0
-1987,19.76,1.98,0,0,0,0
-1988,46.44,0.75,0.03,0,0,0
-1989,72.83,0.62,0,0,0,0
-1990,46.79,0,0,2.6,0,0
-1991,27.89,0,0,4.34,0,0
-1992,60.44,0,3.03,12.7,0,0
-1993,43.62,0.21,,4.57,0,0
-1994,47.36,0.82,12.86,12.12,6.02,0
-1995,35.81,0.57,4.23,11.58,35.92,0
-1996,86.06,0.13,10.59,7.69,94.68,0
-1997,46.87,0,11.26,6.77,136.08,0
-1998,76.4,0,3.26,7.21,169.58,0
-1999,96.23,0.46,4.73,5.26,144.57,0
-2000,53.83,0.68,4.68,5.99,135.41,0.99
-2001,100.42,0.28,5.51,1.07,201.95,22.82
-2002,126.39,0,8.59,0.29,212.09,48.15
-2003,107.39,0,8.91,0,186.34,55.16
-2004,124.25,0,10.41,0,218.89,65.5
-2005,191.92,0,4.41,0,204.54,57.44
-2006,273.68,0,2.91,0,179.82,61.81
-2007,303.85,0,9.33,0.02,196.19,95.98
-2008,316.9,0,12.59,0.04,206.83,135.43
-2009,326.54,0,16.94,0,195.12,120.28
-2010,213.16,0,24.36,0,182.99,170.08
-2011,149.07,0,35.1,0,179.68,143.94
-2012,101.67,0,23.28,0,131.24,99.65
-2013,88.46,0,12.4,0,152.86,107.52
-2014,69.58,0,13.3,0,159.71,88.92
-2015,45.28,0,8.55,0,142.18,72.04
-2016,19.9,0,5.27,0,77.14,27.79
-2017,0,0,0,0,0.06,0
-2020,0.29,0,0,0,0,0
+Year,Nintendo,Other,PC,Sega,Sony,Xbox,Nintendo_top,Other_top,PC_top,Sega_top,Sony_top,Xbox_top
+1980,0,11.38,0,0,0,0,,Asteroids;2600,,,,
+1981,0,35.77,0,0,0,0,,Pitfall!;2600,,,,
+1982,0,28.86,0,0,0,0,,Pac-Man;2600,,,,
+1983,10.96,5.83,0,0,0,0,Baseball;NES,Pitfall II: Lost Caverns;2600,,,,
+1984,50.09,0.27,0,0,0,0,Duck Hunt;NES,Beamrider;2600,,,,
+1985,53.46,0.45,0.03,0,0,0,Super Mario Bros.;NES,Ghostbusters;2600,Alter Ego;PC,,,
+1986,36.41,0.66,0,0,0,0,The Legend of Zelda;NES,Solaris;2600,,,,
+1987,19.76,1.98,0,0,0,0,Zelda II: The Adventure of Link;NES,Kung-Fu Master;2600,,,,
+1988,46.44,0.75,0.03,0,0,0,Super Mario Bros. 3;NES,River Raid II;2600,SimCity;PC,,,
+1989,72.83,0.62,0,0,0,0,Tetris;GB,Double Dragon;2600,,,,
+1990,46.79,0,0,2.6,0,0,Super Mario World;SNES,,,Streets of Rage;GEN,,
+1991,27.89,0,0,4.34,0,0,The Legend of Zelda: A Link to the Past;SNES,,,Sonic the Hedgehog;GEN,,
+1992,60.44,0,3.03,12.7,0,0,Super Mario Land 2: 6 Golden Coins;GB,,SimCity 2000;PC,Sonic the Hedgehog 2;GEN,,
+1993,43.62,0.21,,4.57,0,0,Super Mario All-Stars;SNES,The King of Fighters '94 (CD);NG,,,,
+1994,47.36,0.82,12.86,12.12,6.02,0,Donkey Kong Country;SNES,Samurai Shodown II;NG,Doom II: Hell on Earth;PC,Sonic & Knuckles;GEN,Battle Arena Toshinden;PS,
+1995,35.81,0.57,4.23,11.58,35.92,0,Donkey Kong Country 2: Diddy's Kong Quest;SNES,The King of Fighters '95;NG,Warcraft II: Tides of Darkness;PC,Virtua Fighter 2;SAT,Namco Museum Vol.1;PS,
+1996,86.06,0.13,10.59,7.69,94.68,0,Pokemon Red/Pokemon Blue;GB,The King of Fighters '96;NG,Microsoft Flight Simulator;PC,Fighters MEGAMiX;SAT,Crash Bandicoot;PS,
+1997,46.87,0,11.26,6.77,136.08,0,GoldenEye 007;N64,,Half-Life;PC,Puyo Puyo Sun;SAT,Gran Turismo;PS,
+1998,76.4,0,3.26,7.21,169.58,0,Pokemon Yellow: Special Pikachu Edition;GB,,Sim Theme Park;PC,Sonic Adventure;DC,Tekken 3;PS,
+1999,96.23,0.46,4.73,5.26,144.57,0,Pokemon Gold/Pokemon Silver;GB,Digimon Adventure: Anode Tamer;WS,Who wants to be a millionaire;PC,NFL 2K;DC,Gran Turismo 2;PS,
+2000,53.83,0.68,4.68,5.99,135.41,0.99,Pokémon Crystal Version;GB,Final Fantasy;WS,The Sims: Livin Large;PC,Crazy Taxi;DC,Final Fantasy IX;PS,NFL Fever 2002;XB
+2001,100.42,0.28,5.51,1.07,201.95,22.82,Super Smash Bros. Melee;GC,Final Fantasy II;WS,The Sims: House Party;PC,Sakura Wars 3: Paris wa Moeteiru ka;DC,Gran Turismo 3: A-Spec;PS2,Halo: Combat Evolved;XB
+2002,126.39,0,8.59,0.29,212.09,48.15,Pokemon Ruby/Pokemon Sapphire;GBA,,The Sims: Unleashed;PC,"Sakura Wars 4: Koi Seyo,Otome;DC",Grand Theft Auto: Vice City;PS2,Tom Clancy's Splinter Cell;XB
+2003,107.39,0,8.91,0,186.34,55.16,Mario Kart: Double Dash!!;GC,,The Sims: Makin' Magic;PC,,Need for Speed Underground;PS2,Rockstar Games Double Pack: Grand Theft Auto III & Grand Theft Auto Vice City;XB
+2004,124.25,0,10.41,0,218.89,65.5,Pokemon FireRed/Pokemon LeafGreen;GBA,,World of Warcraft;PC,,Grand Theft Auto: San Andreas;PS2,Halo 2;XB
+2005,191.92,0,4.41,0,204.54,57.44,Nintendogs;DS,,The Sims 2: Nightlife;PC,,Grand Theft Auto: Liberty City Stories;PSP,Call of Duty 2;X360
+2006,273.68,0,2.91,0,179.82,61.81,Wii Sports;Wii,,The Sims 2: Open for Business;PC,,Final Fantasy XII;PS2,Gears of War;X360
+2007,303.85,0,9.33,0.02,196.19,95.98,Wii Fit;Wii,,World of Warcraft: The Burning Crusade;PC,Triggerheart Exelica;DC,Call of Duty 4: Modern Warfare;PS3,Halo 3;X360
+2008,316.9,0,12.59,0.04,206.83,135.43,Mario Kart Wii;Wii,,World of Warcraft: Wrath of the Lich King;PC,Pia Carrot e Youkoso!! 2.5;DC,Grand Theft Auto IV;PS3,Grand Theft Auto IV;X360
+2009,326.54,0,16.94,0,195.12,120.28,Wii Sports Resort;Wii,,The Sims 3;PC,,Call of Duty: Modern Warfare 2;PS3,Call of Duty: Modern Warfare 2;X360
+2010,213.16,0,24.36,0,182.99,170.08,Pokemon Black/Pokemon White;DS,,StarCraft II: Wings of Liberty;PC,,Call of Duty: Black Ops;PS3,Kinect Adventures!;X360
+2011,149.07,0,35.1,0,179.68,143.94,Mario Kart 7;3DS,,The Elder Scrolls V: Skyrim;PC,,Call of Duty: Modern Warfare 3;PS3,Call of Duty: Modern Warfare 3;X360
+2012,101.67,0,23.28,0,131.24,99.65,New Super Mario Bros. 2;3DS,,Diablo III;PC,,Call of Duty: Black Ops II;PS3,Call of Duty: Black Ops II;X360
+2013,88.46,0,12.4,0,152.86,107.52,Pokemon X/Pokemon Y;3DS,,StarCraft II: Heart of the Swarm;PC,,Grand Theft Auto V;PS3,Grand Theft Auto V;X360
+2014,69.58,0,13.3,0,159.71,88.92,Pokemon Omega Ruby/Pokemon Alpha Sapphire;3DS,,The Sims 4;PC,,Grand Theft Auto V;PS4,Grand Theft Auto V;XOne
+2015,45.28,0,8.55,0,142.18,72.04,Splatoon;WiiU,,Fallout 4;PC,,Call of Duty: Black Ops 3;PS4,Call of Duty: Black Ops 3;XOne
+2016,19.9,0,5.27,0,77.14,27.79,Pokemon Sun/Moon;3DS,,Farming Simulator 17;PC,,FIFA 17;PS4,FIFA 17;XOne
+2017,0,0,0,0,0.06,0,,,,,Phantasy Star Online 2 Episode 4: Deluxe Package;PS4,
+2020,0.29,0,0,0,0,0,Imagine: Makeup Artist;DS,,,,,
