@@ -387,15 +387,15 @@ async function create_viz(data_file_name) {
     
     //define width, height and margin variables
     const width = 1440
-    const height = 800
+    const height = 780
     const canvas_width = 1700
-    const canvas_height = 830
+    const canvas_height = 800
     const margin = ({top: 20, right: 30, bottom: 30, left: 100})
     const curve_type = d3.curveMonotoneX; //change curve types
     const marker_size = 2; //change marker size on points
     const scene_domain = [1980, 1989];
     //add border for debugging; might change it later if needed
-    d3.select('#chart').style("border", "2px solid black");
+    // d3.select('#chart').style("border", "2px solid black");
 
     const data = await d3.csv(data_file_name +'?' + Math.floor(Math.random() * 1000));  //random stuff added so the browser doesn't cache csv files
     // const test_data = await d3.csv("js/data/test.csv" +'?' + Math.floor(Math.random() * 1000));
@@ -520,8 +520,8 @@ async function create_viz(data_file_name) {
                 Platform: ${read_top_game(d.Nintendo_top)[1]} <br>
                 `
             )
-            .style("left", (d3.event.pageX + 25) + "px")
-            .style("top", (d3.event.pageY + "px")  );
+            .style("left", (d3.mouse(this)[0]+150) + "px")
+            .style("top", (d3.mouse(this)[1]) + "px");
             
             // console.log("x:" + (d3.pointer(event)[0] ));
             // console.log("y:" + (d3.pointer(event)[1] ));
@@ -551,8 +551,8 @@ async function create_viz(data_file_name) {
                 Platform: ${read_top_game(d.Other_top)[1]} <br>
                 `
             )
-            .style("left", (d3.event.pageX + 25) + "px")
-            .style("top", (d3.event.pageY + "px")  );
+            .style("left", (d3.mouse(this)[0]+150) + "px")
+            .style("top", (d3.mouse(this)[1]) + "px")
             
             // console.log("x:" + (d3.pointer(event)[0] ));
             // console.log("y:" + (d3.pointer(event)[1] ));
@@ -582,9 +582,9 @@ async function create_viz(data_file_name) {
                 Platform: ${read_top_game(d.Sega_top)[1]} <br>
                 `
             )
-            .style("left", (d3.event.pageX + 25) + "px")
-            .style("top", (d3.event.pageY + "px")  );
-            
+            .style("left", (d3.mouse(this)[0]+150) + "px")
+            .style("top", (d3.mouse(this)[1]) + "px")
+
             // console.log("x:" + (d3.pointer(event)[0] ));
             // console.log("y:" + (d3.pointer(event)[1] ));
     
@@ -613,8 +613,8 @@ async function create_viz(data_file_name) {
                     Platform: ${read_top_game(d.Sony_top)[1]} <br>
                     `
                 )
-                .style("left", (d3.event.pageX + 25) + "px")
-                .style("top", (d3.event.pageY + "px")  );
+            .style("left", (d3.mouse(this)[0]+150) + "px")
+            .style("top", (d3.mouse(this)[1]) + "px")
                 // console.log("x:" + (d3.pointer(event)[0] ));
                 // console.log("y:" + (d3.pointer(event)[1] ));
         
@@ -642,8 +642,8 @@ async function create_viz(data_file_name) {
                     Platform: ${read_top_game(d.Xbox_top)[1]} <br>
                     `
                 )
-                .style("left", (d3.event.pageX + 25) + "px")
-                .style("top", (d3.event.pageY + "px")  );
+                .style("left", (d3.mouse(this)[0]+150) + "px")
+                .style("top", (d3.mouse(this)[1]) + "px")
                 // console.log("x:" + (d3.pointer(event)[0] ));
                 // console.log("y:" + (d3.pointer(event)[1] ));
         
@@ -811,9 +811,9 @@ async function create_viz(data_file_name) {
         .attr("id", "x_axis_label");
 
     svg.append("text")
-        .text("Sales (Millions of US $)")
+        .text("Total Sales (Millions of US $)")
         .attr("transform", 'rotate(-90)')
-        .attr("x", -(height/2)+margin.top+margin.bottom )
+        .attr("x", -(height/2)+margin.top+margin.bottom+20)
         .attr("y", -50)
         .attr("text-anchor", "end")
         .attr("class", "axis_label")
@@ -823,16 +823,63 @@ async function create_viz(data_file_name) {
         const timeFormat = d3.timeFormat("%Y")
         const type = d3.annotationCalloutElbow
 
-        const annotations = [{
+        const annotations = [
+        {
           note: {
-            label: "Longer text to show text wrapping",
-            title: "Annotations :)"
+            label: "In the beginning, the most popular games for consoles were games \
+            that were converted from popular arcade games like Pac-Man in 1982.",
+            title: "Arcade Games:"
           },
           //can use x, y directly instead of data
-          data: { Year: 2009, sales: 326.54 },
-          dy: 137,
-          dx: 200
-        }]
+          id: 'annotation_1',
+          data: { Year: 1982, sales: 28.86 },
+          dy: 28,
+          dx: -79,
+          color: "Black",
+        },
+        
+        {
+            note: {
+              label: "Super Mario Bros. (also originally an arcade game) was one of the \
+              first platforming games for consoles.",
+              title: "Super Mario:"
+            },
+            //can use x, y directly instead of data
+            id: 'annotation_2',
+            data: { Year: 1985, sales: 53.46 },
+            dy: 136,
+            dx: -37,
+            color: "Black",
+        },
+        {
+            note: {
+              label: "While previous console games had iconic soundtracks, Legend of Zelda II \
+              was one of the first games to use music as part of the game's mechanics.",
+              title: "Music in Games:"
+            },
+            //can use x, y directly instead of data
+            id: 'annotation_3',
+            data: { Year: 1987, sales: 19.76 },
+            dy: -224.49998779296874,
+            dx: -53.546875,
+            color: "Black",
+        },
+        {
+            note: {
+              label: "Even though the Atari 2600 was still very popular, most games at this time were sold for the NES.",
+              title: "Atari 2600:"
+            },
+            //can use x, y directly instead of data
+            id: 'annotation_4',
+            data: { Year: 1987, sales: 1.98 },
+            dy: -34.69999999999999,
+            dx: 113,
+            color: "Black",
+        },
+    
+    
+    
+        ]
                       
           
           const makeAnnotations = d3.annotation().annotations(annotations)
@@ -868,12 +915,12 @@ async function update_viz(data_file_name){
     await create_viz(data_file_name);
 
 
-    d3.select("svg")
-        .append("text")
-        .attr("x", 485)
-        .attr("y", 100)
-        .attr("text-anchor", "middle")
-        .text(data_file_name);
+    // d3.select("svg")
+    //     .append("text")
+    //     .attr("x", 485)
+    //     .attr("y", 100)
+    //     .attr("text-anchor", "middle")
+    //     .text(data_file_name);
 
     
 
