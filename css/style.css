@@ -6,6 +6,18 @@ h1 {
     color: #000000;
     font-family: Arial, Helvetica, sans-serif;
     text-align: center;
+    z-index: 2;
+    /* position: relative; */
+    /* top: 50px; */
+}
+
+p{
+    position: absolute;
+    z-index: 2;
+    left: 1660px;
+    top:600px;
+    border: 3px solid #73AD21;
+    width: 200px;
 }
 
 /* .tooltip {
@@ -14,8 +26,12 @@ h1 {
     font-size: 150%;
 } */
 
+form{
+    padding: 5px;
+}
+
 #scene_selectors{
-    position: relative;
+    position: absolute;
     z-index: 2;
     left: 1750px;
     top:160px;
@@ -23,8 +39,33 @@ h1 {
     width: 130px;
 }
 
+#line_changers{
+    position: absolute;
+    z-index: 2;
+    left: 1750px;
+    top:310px;
+    border: 3px solid #73AD21;
+    width: 130px;
+}
+
+.update_button{
+    margin-top: 10px;
+}
+
+
+#line_selectors{
+    position: absolute;
+    z-index: 2;
+    left: 1750px;
+    top:460px;
+    border: 3px solid #73AD21;
+    width: 120px;
+}
+
+
+
 #chart{
     position: relative;
-    top: -20px;
+    top: -50px;
 }
 

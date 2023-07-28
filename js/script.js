@@ -306,7 +306,7 @@ function redraw_xbox_line(line, data, x_scale, y_scale, parse_year, curve_type, 
 function create_legend(data){
 
     const size = 12;
-    const start_x = 1545;
+    const start_x = 1600;
     const start_y = 394;
     const colors = ["#e4000f", "orange", "blue", "green", "gray"];
     var keys = data.columns.slice(1);
@@ -386,15 +386,15 @@ async function create_viz(data_file_name) {
     
     //define width, height and margin variables
     const width = 1440
-    const height = 800
-    const canvas_width = 1870
-    const canvas_height = 840
+    const height = 780
+    const canvas_width = 1700
+    const canvas_height = 800
     const margin = ({top: 20, right: 30, bottom: 30, left: 100})
     const curve_type = d3.curveMonotoneX; //change curve types
     const marker_size = 2; //change marker size on points
 
     //add border for debugging; might change it later if needed
-    d3.select('#chart').style("border", "2px solid black");
+    // d3.select('#chart').style("border", "2px solid black");
 
     const data = await d3.csv(data_file_name +'?' + Math.floor(Math.random() * 1000));  //random stuff added so the browser doesn't cache csv files
     // const test_data = await d3.csv("js/data/test.csv" +'?' + Math.floor(Math.random() * 1000));
@@ -878,13 +878,18 @@ async function update_viz(data_file_name){
     await create_viz(data_file_name);
 
 
-    d3.select("svg")
-        .append("text")
-        .attr("x", 485)
-        .attr("y", 100)
-        .attr("text-anchor", "middle")
-        .text(data_file_name);
+    // d3.select("svg")
+    //     .append("text")
+    //     .attr("x", 485)
+    //     .attr("y", 100)
+    //     .attr("text-anchor", "middle")
+    //     .text(data_file_name);
 
+    // d3.select("p").html('')
+    
+    // d3.select("p").html('<strong>Average Sales Lines:<br></strong> \
+    // Each line was calculated by summing the sales of each game for each year, and each console manufacturer \
+    // and then dividing by the number of games for each year, and each console manufacturer.')
     
 
 }

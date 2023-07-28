@@ -11,19 +11,44 @@
     <script src="js/script.js"></script>
 </head>
 <body onload="update_viz(total_data_file_name)" >
-    <form action="html/scene1.html">
-        <input type="submit" value="Scene1"/>
-    </form>
-    <!-- <svg id="chart" width=1540 height=900></svg> -->
-    <button onclick="update_viz(total_data_file_name)">Total</button>
-    <button onclick="update_viz(avg_data_file_name)">Average</button>
-    <button onclick="update_viz(max_data_file_name)">Maximum</button>
-    <label><input type="checkbox" id="nintendo_checkbox" checked="checked"> Nintendo</label>
-    <label><input type="checkbox" id="sega_checkbox" checked="checked"> Sega</label>
-    <label><input type="checkbox" id="sony_checkbox" checked="checked"> Sony</label>
-    <label><input type="checkbox" id="xbox_checkbox" checked="checked"> Xbox</label>
-    <label><input type="checkbox" id="other_checkbox" checked="checked"> Other</label>
+    <h1>Video Game Sales through the Decades: Interactive Chart</h1>
+    <p><strong>Total Sales Lines:<br></strong>
+        Each line was calculated by summing the sales of each game for that year and that console manufacturer.
+    </p>
 
+    <div id = "scene_selectors">
+        <form action="html/scene1.html">
+            <input type="submit" value="1980-1990"/>
+        </form>
+        <form action="html/scene1.html">
+            <input type="submit" value="Scene2"/>
+        </form>
+        <form action="html/scene1.html">
+            <input type="submit" value="Scene3"/>
+        </form>
+    </div>
+
+    
+    <div id = "line_changers">
+        <button onclick="update_viz(total_data_file_name)" class = "update_button">Total</button>
+        <br>
+        <button onclick="update_viz(avg_data_file_name)" class = "update_button">Average</button>
+        <br>
+        <button onclick="update_viz(max_data_file_name)" class = "update_button">Maximum</button>
+        <br>
+    </div>
+    
+    <div id = "line_selectors">
+        <label><input type="checkbox" id="nintendo_checkbox" checked="checked"> Nintendo</label>
+        <br>
+        <label><input type="checkbox" id="sega_checkbox" checked="checked"> Sega</label>
+        <br>
+        <label><input type="checkbox" id="sony_checkbox" checked="checked"> Sony</label>
+        <br>
+        <label><input type="checkbox" id="xbox_checkbox" checked="checked"> Xbox</label>
+        <br>
+        <label><input type="checkbox" id="other_checkbox" checked="checked"> Other</label>
+    </div>
 
 
     <div id = "checkbox_div"> 
