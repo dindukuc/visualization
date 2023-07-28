@@ -306,9 +306,10 @@ function redraw_xbox_line(line, data, x_scale, y_scale, parse_year, curve_type, 
 function create_legend(data){
 
     const size = 12;
-    const start_x = 1545;
+    const start_x = 1600;
     const start_y = 394;
     const colors = ["#e4000f", "orange", "blue", "green", "gray"];
+    // console.log(data.columns)
     var keys = data.columns.slice(1);
     const pc_index = keys.indexOf("PC");
     const other_index = keys.indexOf("Other");
@@ -387,12 +388,12 @@ async function create_viz(data_file_name) {
     //define width, height and margin variables
     const width = 1440
     const height = 800
-    const canvas_width = 1870
-    const canvas_height = 840
+    const canvas_width = 1700
+    const canvas_height = 830
     const margin = ({top: 20, right: 30, bottom: 30, left: 100})
     const curve_type = d3.curveMonotoneX; //change curve types
     const marker_size = 2; //change marker size on points
-
+    const scene_domain = [1980, 1989];
     //add border for debugging; might change it later if needed
     d3.select('#chart').style("border", "2px solid black");
 
@@ -400,6 +401,7 @@ async function create_viz(data_file_name) {
     // const test_data = await d3.csv("js/data/test.csv" +'?' + Math.floor(Math.random() * 1000));
     console.log(data);  //checking to see if the data is being read in properly
     // console.log(test_data);
+    const filtered_data = data.filter(function(d){return (+d.Year >= scene_domain[0]) &&  (+d.Year <= scene_domain[1])})
 
     //defining the svg element that will be added into the overall svg element
     const svg = d3.select("#chart")
@@ -418,7 +420,7 @@ async function create_viz(data_file_name) {
     const parse_year = d3.timeParse("%Y");
     var x_scale = d3.scaleTime()
         .domain(
-            d3.extent(data, d => parse_year(d.Year))
+            d3.extent(filtered_data, d => parse_year(d.Year)) // [parse_year(scene_domain[0]), parse_year(scene_domain[1])] 
         )
         .range([0, width]);
     
@@ -426,7 +428,7 @@ async function create_viz(data_file_name) {
     //create y_scale
     var y_scale = d3.scaleLinear()
         .domain([
-            0, d3.max(data, d => d3.max([+d.Nintendo, +d.Other, +d.PC, +d.Sega, +d.Sony, +d.Xbox])) 
+            0, d3.max(filtered_data, d => d3.max([+d.Nintendo, +d.Other, +d.PC, +d.Sega, +d.Sony, +d.Xbox])) 
             //changed domain -- maybe make it a variable later
         ]).nice()
         .range([height, 0]);
@@ -466,7 +468,7 @@ async function create_viz(data_file_name) {
     
 
    
-    draw_lines(line, data, x_scale, y_scale, parse_year, curve_type, marker_size);
+    draw_lines(line, filtered_data, x_scale, y_scale, parse_year, curve_type, marker_size);
 
     // line.append("g")
     //     .attr("class", "brush") 
@@ -527,7 +529,7 @@ async function create_viz(data_file_name) {
         }
 
         line.selectAll("points")
-            .data(data)
+            .data(filtered_data)
             .enter()
             .append("circle")
             .attr("cx", function(d) { return x_scale(parse_year(d.Year)); })      
@@ -557,7 +559,7 @@ async function create_viz(data_file_name) {
 
         }    
         line.selectAll("points")
-            .data(data)
+            .data(filtered_data)
             .enter()
             .append("circle")
             .attr("cx", function(d) { return x_scale(parse_year(d.Year)); })      
@@ -589,7 +591,7 @@ async function create_viz(data_file_name) {
         }
 
         line.selectAll("points")
-            .data(data)
+            .data(filtered_data)
             .enter()
             .append("circle")
             .attr("cx", function(d) { return x_scale(parse_year(d.Year)); })      
@@ -619,7 +621,7 @@ async function create_viz(data_file_name) {
             }
     
             line.selectAll("points")
-                .data(data)
+                .data(filtered_data)
                 .enter()
                 .append("circle")
                 .attr("cx", function(d) { return x_scale(parse_year(d.Year)); })      
@@ -648,7 +650,7 @@ async function create_viz(data_file_name) {
             }
     
             line.selectAll("points")
-                .data(data)
+                .data(filtered_data)
                 .enter()
                 .append("circle")
                 .attr("cx", function(d) { return x_scale(parse_year(d.Year)); })      
