@@ -393,7 +393,7 @@ async function create_viz(data_file_name) {
     const margin = ({top: 20, right: 30, bottom: 30, left: 100})
     const curve_type = d3.curveMonotoneX; //change curve types
     const marker_size = 2; //change marker size on points
-    const scene_domain = [1990, 1999];
+    const scene_domain = [2000, 2009];
     //add border for debugging; might change it later if needed
     // d3.select('#chart').style("border", "2px solid black");
 
@@ -700,40 +700,39 @@ async function create_viz(data_file_name) {
         const annotations = [
         {
           note: {
-            label: "This console was actually adapted from a Sega arcade cabinet and was one of first 16-bit consoles.",
-            title: "Sega Genesis:"
+            label: "Racing games were very popular for the Playstation 2 all throughout the 2000s.",
+            title: "Racing Games:"
           },
           //can use x, y directly instead of data
           id: 'annotation_1',
-          data: { Year: 1991, sales: 4.34 },
-          dy: -55,
-          dx: 119,
+          data: { Year: 2001, sales: 201.95 },
+          dy: -71,
+          dx: 87,
           color: "Black",
         },
         
         {
             note: {
-              label: "Despite being released at the end of the GameBoy's life, Pokemon Red/Blue was a massive hit. \
-              Even in 2023, it still has the most number of copies sold of any other game in the franchise.",
-              title: "Pokemon:"
+              label: "With it's innovative motion controllers, the Wii is widely regarded as one the best game consoles of all time.",
+              title: "Nintendo Wii:"
             },
             //can use x, y directly instead of data
             id: 'annotation_2',
-            data: { Year: 1996, sales: 86.06 },
-            dy: -75,
-            dx: -169,
+            data: { Year: 2007, sales: 303.85 },
+            dy: 21,
+            dx: 55,
             color: "Black",
         },
         {
             note: {
-              label: "Sony joined the market late but more games were sold for the PlayStation in just 3 years than any Nintendo consoles.",
-              title: "Sony:"
+              label: "Another late-comer to the market but was very popular with their collection online multiplayer FPS games.",
+              title: "Xbox:"
             },
             //can use x, y directly instead of data
             id: 'annotation_3',
-            data: { Year: 1996, sales: 94.68 },
-            dy: -11.5,
-            dx: 221.5,
+            data: { Year: 2007, sales: 95.98 },
+            dy: 28.5,
+            dx: 47.5,
             color: "Black",
         },
         {

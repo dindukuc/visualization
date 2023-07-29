@@ -393,7 +393,7 @@ async function create_viz(data_file_name) {
     const margin = ({top: 20, right: 30, bottom: 30, left: 100})
     const curve_type = d3.curveMonotoneX; //change curve types
     const marker_size = 2; //change marker size on points
-    const scene_domain = [1990, 1999];
+    const scene_domain = [2010, 2015];
     //add border for debugging; might change it later if needed
     // d3.select('#chart').style("border", "2px solid black");
 
@@ -700,40 +700,39 @@ async function create_viz(data_file_name) {
         const annotations = [
         {
           note: {
-            label: "This console was actually adapted from a Sega arcade cabinet and was one of first 16-bit consoles.",
-            title: "Sega Genesis:"
+            label: "Despite the whole market taking a dip, around 30% more games were sold for the Playstation 3 than it's competitors.",
+            title: "Dip in sales:"
           },
           //can use x, y directly instead of data
           id: 'annotation_1',
-          data: { Year: 1991, sales: 4.34 },
-          dy: -55,
-          dx: 119,
+          data: { Year: 2012, sales: 131.24 },
+          dy: -71,
+          dx: 87,
           color: "Black",
         },
         
         {
             note: {
-              label: "Despite being released at the end of the GameBoy's life, Pokemon Red/Blue was a massive hit. \
-              Even in 2023, it still has the most number of copies sold of any other game in the franchise.",
-              title: "Pokemon:"
+              label: "Contrary to the Wii, the Wii U is Nintendo's worst selling console and that can be seen here from the dip in sales.",
+              title: "The Wii U:"
             },
             //can use x, y directly instead of data
             id: 'annotation_2',
-            data: { Year: 1996, sales: 86.06 },
-            dy: -75,
-            dx: -169,
+            data: { Year: 2013, sales: 88.46 },
+            dy: 45,
+            dx: -61,
             color: "Black",
         },
         {
             note: {
-              label: "Sony joined the market late but more games were sold for the PlayStation in just 3 years than any Nintendo consoles.",
-              title: "Sony:"
+              label: "This general downard trend is attributed to PC gaming becoming more accessible and having a larger library of games.",
+              title: "Downward Trend:"
             },
             //can use x, y directly instead of data
             id: 'annotation_3',
-            data: { Year: 1996, sales: 94.68 },
-            dy: -11.5,
-            dx: 221.5,
+            data: { Year: 2015, sales: 72.04 },
+            dy: -61,
+            dx: -81,
             color: "Black",
         },
         {
