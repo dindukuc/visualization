@@ -23,7 +23,7 @@ h4 {
     z-index: 2;
     left: 1660px;
     top:600px;
-    border: 3px solid #73AD21;
+    /* border: 3px solid #73AD21; */
     width: 200px;
 }
 
@@ -32,7 +32,7 @@ h4 {
     z-index: 2;
     left: 1660px;
     top:750px;
-    border: 3px solid #73AD21;
+    /* border: 3px solid #73AD21; */
     width: 200px;
 }
 
@@ -51,7 +51,7 @@ form{
     z-index: 2;
     left: 1750px;
     top:150px;
-    border: 3px solid #73AD21;
+    /* border: 3px solid #73AD21; */
     width: 130px;
 }
 
@@ -60,7 +60,7 @@ form{
     z-index: 2;
     left: 1750px;
     top:330px;
-    border: 3px solid #73AD21;
+    /* border: 3px solid #73AD21; */
     width: 130px;
 }
 
@@ -74,7 +74,7 @@ form{
     z-index: 2;
     left: 1750px;
     top:460px;
-    border: 3px solid #73AD21;
+    /* border: 3px solid #73AD21; */
     width: 120px;
 }
 
