@@ -916,15 +916,6 @@ async function create_viz(data_file_name) {
 async function update_viz(data_file_name){
     d3.select("#chart").html('');
     await create_viz(data_file_name);
-
-
-    // d3.select("svg")
-    //     .append("text")
-    //     .attr("x", 485)
-    //     .attr("y", 100)
-    //     .attr("text-anchor", "middle")
-    //     .text(data_file_name);
-
     
 
 }
@@ -932,6 +923,6 @@ async function update_viz(data_file_name){
 
 
 
-const  total_data_file_name = "/js/data/videogames_total_sales_per_year.csv"
-const  avg_data_file_name = "/js/data/videogames_average_sales_per_year.csv"
-const  max_data_file_name = "/js/data/videogames_max_sales_per_year.csv"
+const  total_data_file_name = "js/data/videogames_total_sales_per_year.csv"
+const  avg_data_file_name = "js/data/videogames_average_sales_per_year.csv"
+const  max_data_file_name = "js/data/videogames_max_sales_per_year.csv"
