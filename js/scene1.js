@@ -490,7 +490,8 @@ async function create_viz(data_file_name) {
         .style("border-width", "1px")
         .style("border-radius", "5px")
         .style("padding", "10px")
-        .style("position","absolute");
+        .style("position","absolute")
+        .style("z-index", 3);
 
 
 

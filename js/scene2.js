@@ -309,6 +309,7 @@ function create_legend(data){
     const start_x = 1600;
     const start_y = 394;
     const colors = ["#e4000f", "orange", "blue", "green", "gray"];
+    // console.log(data.columns)
     var keys = data.columns.slice(1);
     const pc_index = keys.indexOf("PC");
     const other_index = keys.indexOf("Other");
@@ -392,7 +393,7 @@ async function create_viz(data_file_name) {
     const margin = ({top: 20, right: 30, bottom: 30, left: 100})
     const curve_type = d3.curveMonotoneX; //change curve types
     const marker_size = 2; //change marker size on points
-
+    const scene_domain = [1990, 1999];
     //add border for debugging; might change it later if needed
     // d3.select('#chart').style("border", "2px solid black");
 
@@ -400,6 +401,7 @@ async function create_viz(data_file_name) {
     // const test_data = await d3.csv("js/data/test.csv" +'?' + Math.floor(Math.random() * 1000));
     console.log(data);  //checking to see if the data is being read in properly
     // console.log(test_data);
+    const filtered_data = data.filter(function(d){return (+d.Year >= scene_domain[0]) &&  (+d.Year <= scene_domain[1])})
 
     //defining the svg element that will be added into the overall svg element
     const svg = d3.select("#chart")
@@ -418,7 +420,7 @@ async function create_viz(data_file_name) {
     const parse_year = d3.timeParse("%Y");
     var x_scale = d3.scaleTime()
         .domain(
-            d3.extent(data, d => parse_year(d.Year))
+            d3.extent(filtered_data, d => parse_year(d.Year)) // [parse_year(scene_domain[0]), parse_year(scene_domain[1])] 
         )
         .range([0, width]);
     
@@ -426,7 +428,7 @@ async function create_viz(data_file_name) {
     //create y_scale
     var y_scale = d3.scaleLinear()
         .domain([
-            0, d3.max(data, d => d3.max([+d.Nintendo, +d.Other, +d.PC, +d.Sega, +d.Sony, +d.Xbox])) 
+            0, d3.max(filtered_data, d => d3.max([+d.Nintendo, +d.Other, +d.PC, +d.Sega, +d.Sony, +d.Xbox])) 
             //changed domain -- maybe make it a variable later
         ]).nice()
         .range([height, 0]);
@@ -445,19 +447,19 @@ async function create_viz(data_file_name) {
 
    
     
-    // Add a clipPath everything out of this area won't be drawn
-    const clip = svg.append("defs").append("svg:clipPath")
-        .attr("id", "clip")
-        .append("svg:rect")
-        .attr("width", width )
-        .attr("height", height )
-        .attr("x", 0)
-        .attr("y", 0);
+    // // Add a clipPath everything out of this area won't be drawn
+    // const clip = svg.append("defs").append("svg:clipPath")
+    //     .attr("id", "clip")
+    //     .append("svg:rect")
+    //     .attr("width", width )
+    //     .attr("height", height )
+    //     .attr("x", 0)
+    //     .attr("y", 0);
 
-    // Add brushing to line chart
-    const brush = d3.brush()                   
-        .extent( [ [0,0], [width,height] ] )  
-        .on("end", updateChart)               
+    // // Add brushing to line chart
+    // const brush = d3.brush()                   
+    //     .extent( [ [0,0], [width,height] ] )  
+    //     .on("end", updateChart)               
 
     // line variable; wiill containall of the lines that are created in the draw_lines function
     const line = svg.append('g')
@@ -466,58 +468,12 @@ async function create_viz(data_file_name) {
     
 
    
-    draw_lines(line, data, x_scale, y_scale, parse_year, curve_type, marker_size);
+    draw_lines(line, filtered_data, x_scale, y_scale, parse_year, curve_type, marker_size);
 
-    line.append("g")
-        .attr("class", "brush") 
-        .call(brush); //calling brush function on line
+    // line.append("g")
+    //     .attr("class", "brush") 
+    //     .call(brush); //calling brush function on line
     
-
-    // sets idleTimeOut to null
-    let idleTimeout
-    function idled() { idleTimeout = null; }
-
-    function updateChart(event,d) {
-
-        // get selected boundaries
-        extent = event.selection
-    
-        // If no selection, back to initial coordinate; Otherwise, updates the X axis domain
-        if(!extent){
-          if (!idleTimeout) return idleTimeout = setTimeout(idled, 350); // This allows to wait a little bit
-          x_scale.domain(d3.extent(data, d => parse_year(d.Year)))
-          y_scale.domain([ 0, d3.max(data, d => d3.max([+d.Nintendo, +d.Other, +d.PC, +d.Sega, +d.Sony, +d.Xbox])) ]) //changed domain -- maybe make it a variable later
-        }else{
-          x_scale.domain([ x_scale.invert(extent[0][0]), x_scale.invert(extent[1][0]) ])
-          y_scale.domain([ y_scale.invert(extent[1][1]), y_scale.invert(extent[0][1]) ]).nice()
-          line.select(".brush").call(brush.move, null) // This remove the grey brush area as soon as the selection has been done
-        }
-        
-        // Update axis and line position
-        x_axis.transition().duration(1000).call(d3.axisBottom(x_scale))
-        y_axis.transition().duration(1000).call(d3.axisLeft(y_scale))
-        redraw_nintendo_line(line, data, x_scale, y_scale, parse_year, curve_type, 1000)
-        redraw_other_line(line, data, x_scale, y_scale, parse_year, curve_type, 1000)
-        redraw_sega_line(line, data, x_scale, y_scale, parse_year, curve_type, 1000)
-        redraw_sony_line(line, data, x_scale, y_scale, parse_year, curve_type, 1000)
-        redraw_xbox_line(line, data, x_scale, y_scale, parse_year, curve_type, 1000)
-    }
-
-
-
-    svg.on("dblclick",function(){
-        x_scale.domain(d3.extent(data, d => parse_year(d.Year)))
-        x_axis.transition().duration(1000).call(d3.axisBottom(x_scale))
-        
-        y_scale.domain([ 0, d3.max(data, d => d3.max([+d.Nintendo, +d.Other, +d.PC, +d.Sega, +d.Sony, +d.Xbox])) ]).nice()  
-        y_axis.transition().duration(1000).call(d3.axisLeft(y_scale))
-
-        redraw_nintendo_line(line, data, x_scale, y_scale, parse_year, curve_type, 1000)
-        redraw_other_line(line, data, x_scale, y_scale, parse_year, curve_type, 1000)
-        redraw_sega_line(line, data, x_scale, y_scale, parse_year, curve_type, 1000)
-        redraw_sony_line(line, data, x_scale, y_scale, parse_year, curve_type, 1000)
-        redraw_xbox_line(line, data, x_scale, y_scale, parse_year, curve_type, 1000)
-      });
 
 
     
@@ -541,29 +497,23 @@ async function create_viz(data_file_name) {
 
     
     
-    const mouseover = function(event, d){
+    const mouseover = function(d){
         tooltip.style("opacity", 1).style("display", "block");
         // console.log(tooltip.style("display"))
     
     }
 
-    const mouseleave = function(event, d){
+    const mouseleave = function(d){
         tooltip.transition()
             .duration(150)
             .style("opacity", 0)
             .style("display", "none");
     }
 
-//    var line_value = "";
-
-//    if(){
-
-//    }
-
 
     function draw_tooltip_markers(){
 
-        const mousemove_nintendo = function(event, d) {
+        const mousemove_nintendo = function(d) {
             tooltip.html(
                 `Year: ${+d.Year} <br> 
                 Sales: $${+d.Nintendo} Million <br>
@@ -571,8 +521,8 @@ async function create_viz(data_file_name) {
                 Platform: ${read_top_game(d.Nintendo_top)[1]} <br>
                 `
             )
-            .style("left", (d3.pointer(event)[0] + 140) + "px")
-            .style("top", (d3.pointer(event)[1] + "px")  );
+            .style("left", (d3.mouse(this)[0]+150) + "px")
+            .style("top", (d3.mouse(this)[1]) + "px");
             
             // console.log("x:" + (d3.pointer(event)[0] ));
             // console.log("y:" + (d3.pointer(event)[1] ));
@@ -580,7 +530,7 @@ async function create_viz(data_file_name) {
         }
 
         line.selectAll("points")
-            .data(data)
+            .data(filtered_data)
             .enter()
             .append("circle")
             .attr("cx", function(d) { return x_scale(parse_year(d.Year)); })      
@@ -594,7 +544,7 @@ async function create_viz(data_file_name) {
 
 
 
-        const mousemove_other = function(event, d) {
+        const mousemove_other = function(d) {
             tooltip.html(
                 `Year: ${+d.Year} <br> 
                 Sales: $${+d.Other} Million <br>
@@ -602,15 +552,15 @@ async function create_viz(data_file_name) {
                 Platform: ${read_top_game(d.Other_top)[1]} <br>
                 `
             )
-            .style("left", (d3.pointer(event)[0] + 140) + "px")
-            .style("top", (d3.pointer(event)[1] + "px")  );
+            .style("left", (d3.mouse(this)[0]+150) + "px")
+            .style("top", (d3.mouse(this)[1]) + "px")
             
             // console.log("x:" + (d3.pointer(event)[0] ));
             // console.log("y:" + (d3.pointer(event)[1] ));
 
         }    
         line.selectAll("points")
-            .data(data)
+            .data(filtered_data)
             .enter()
             .append("circle")
             .attr("cx", function(d) { return x_scale(parse_year(d.Year)); })      
@@ -625,7 +575,7 @@ async function create_viz(data_file_name) {
 
 
 
-        const mousemove_sega = function(event, d) {
+        const mousemove_sega = function(d) {
             tooltip.html(
                 `Year: ${+d.Year} <br> 
                 Sales: $${+d.Sega} Million <br>
@@ -633,16 +583,16 @@ async function create_viz(data_file_name) {
                 Platform: ${read_top_game(d.Sega_top)[1]} <br>
                 `
             )
-            .style("left", (d3.pointer(event)[0] + 140) + "px")
-            .style("top", (d3.pointer(event)[1] + "px")  );
-            
+            .style("left", (d3.mouse(this)[0]+150) + "px")
+            .style("top", (d3.mouse(this)[1]) + "px")
+
             // console.log("x:" + (d3.pointer(event)[0] ));
             // console.log("y:" + (d3.pointer(event)[1] ));
     
         }
 
         line.selectAll("points")
-            .data(data)
+            .data(filtered_data)
             .enter()
             .append("circle")
             .attr("cx", function(d) { return x_scale(parse_year(d.Year)); })      
@@ -656,7 +606,7 @@ async function create_viz(data_file_name) {
 
 
 
-            const mousemove_sony = function(event, d) {
+            const mousemove_sony = function(d) {
                 tooltip.html(
                    `Year: ${+d.Year} <br> 
                     Sales: $${+d.Sony} Million <br>
@@ -664,16 +614,15 @@ async function create_viz(data_file_name) {
                     Platform: ${read_top_game(d.Sony_top)[1]} <br>
                     `
                 )
-                .style("left", (d3.pointer(event)[0] + 140) + "px")
-                .style("top", (d3.pointer(event)[1] + "px")  );
-                
+            .style("left", (d3.mouse(this)[0]+150) + "px")
+            .style("top", (d3.mouse(this)[1]) + "px")
                 // console.log("x:" + (d3.pointer(event)[0] ));
                 // console.log("y:" + (d3.pointer(event)[1] ));
         
             }
     
             line.selectAll("points")
-                .data(data)
+                .data(filtered_data)
                 .enter()
                 .append("circle")
                 .attr("cx", function(d) { return x_scale(parse_year(d.Year)); })      
@@ -686,7 +635,7 @@ async function create_viz(data_file_name) {
                 .on("mouseleave", mouseleave );
 
 
-            const mousemove_xbox = function(event, d) {
+            const mousemove_xbox = function(d) {
                 tooltip.html(
                    `Year: ${+d.Year} <br> 
                     Sales: $${+d.Xbox} Million <br>
@@ -694,16 +643,15 @@ async function create_viz(data_file_name) {
                     Platform: ${read_top_game(d.Xbox_top)[1]} <br>
                     `
                 )
-                .style("left", (d3.pointer(event)[0] + 140) + "px")
-                .style("top", (d3.pointer(event)[1] + "px")  );
-                
+                .style("left", (d3.mouse(this)[0]+150) + "px")
+                .style("top", (d3.mouse(this)[1]) + "px")
                 // console.log("x:" + (d3.pointer(event)[0] ));
                 // console.log("y:" + (d3.pointer(event)[1] ));
         
             }
     
             line.selectAll("points")
-                .data(data)
+                .data(filtered_data)
                 .enter()
                 .append("circle")
                 .attr("cx", function(d) { return x_scale(parse_year(d.Year)); })      
@@ -722,135 +670,6 @@ async function create_viz(data_file_name) {
     draw_tooltip_markers();
     
 
-    function hide_nintendo_line(){
-        if(d3.select(this).property("checked")){
-            
-            d3.select('#nintendo_line')
-                .style("opacity", 1);
-            
-            d3.selectAll(".nintendo_markers")
-              .attr("r", marker_size);
-            
-            d3.selectAll(".nintendo_tooltip_markers")
-              .attr("r", 3*marker_size);
-        }
-        else{
-            d3.select('#nintendo_line')
-                .style("opacity", 0);
-            
-            d3.selectAll(".nintendo_markers")
-              .attr("r", 0);
-            
-            d3.selectAll(".nintendo_tooltip_markers")
-              .attr("r", 0);
-        }
-    }
-
-    function hide_sega_line(){
-        if(d3.select(this).property("checked")){
-            
-            d3.select('#sega_line')
-                .style("opacity", 1);
-            
-            d3.selectAll(".sega_markers")
-              .attr("r", marker_size);
-            
-            d3.selectAll(".sega_tooltip_markers")
-              .attr("r", 3*marker_size);
-        }
-        else{
-            d3.select('#sega_line')
-                .style("opacity", 0);
-            
-            d3.selectAll(".sega_markers")
-              .attr("r", 0);
-            
-            d3.selectAll(".sega_tooltip_markers")
-              .attr("r", 0);
-        }
-    }
-
-    function hide_sony_line(){
-        if(d3.select(this).property("checked")){
-            
-            d3.select('#sony_line')
-                .style("opacity", 1);
-            
-            d3.selectAll(".sony_markers")
-              .attr("r", marker_size);
-            
-            d3.selectAll(".sony_tooltip_markers")
-              .attr("r", 3*marker_size);
-        }
-        else{
-            d3.select('#sony_line')
-                .style("opacity", 0);
-            
-            d3.selectAll(".sony_markers")
-              .attr("r", 0);
-            
-            d3.selectAll(".sony_tooltip_markers")
-              .attr("r", 0);
-        }
-    }
-
-    function hide_xbox_line(){
-        if(d3.select(this).property("checked")){
-            
-            d3.select('#xbox_line')
-                .style("opacity", 1);
-            
-            d3.selectAll(".xbox_markers")
-              .attr("r", marker_size);
-            
-            d3.selectAll(".xbox_tooltip_markers")
-              .attr("r", 3*marker_size);
-        }
-        else{
-            d3.select('#xbox_line')
-                .style("opacity", 0);
-            
-            d3.selectAll(".xbox_markers")
-              .attr("r", 0);
-            
-            d3.selectAll(".xbox_tooltip_markers")
-              .attr("r", 0);
-        }
-    }
-
-    function hide_other_line(){
-        if(d3.select(this).property("checked")){
-            
-            d3.select('#other_line')
-                .style("opacity", 1);
-            
-            d3.selectAll(".other_markers")
-              .attr("r", marker_size);
-            
-            d3.selectAll(".other_tooltip_markers")
-              .attr("r", 3*marker_size);
-        }
-        else{
-            d3.select('#other_line')
-                .style("opacity", 0);
-            
-            d3.selectAll(".other_markers")
-              .attr("r", 0);
-            
-            d3.selectAll(".other_tooltip_markers")
-              .attr("r", 0);
-        }
-    }
-
-
-    const nintendo_checkbox = d3.select("#nintendo_checkbox").on("click", hide_nintendo_line);
-    const sega_checkbox = d3.select("#sega_checkbox").on("click", hide_sega_line);
-    const sony_checkbox = d3.select("#sony_checkbox").on("click", hide_sony_line);
-    const xbox_checkbox = d3.select("#xbox_checkbox").on("click", hide_xbox_line);
-    const other_checkbox = d3.select("#other_checkbox").on("click", hide_other_line);
-        
-
-
     create_legend(data);
 
     //add axis labels and such
@@ -861,16 +680,105 @@ async function create_viz(data_file_name) {
         .attr("y", height + margin.bottom + margin.top)
         .attr("text-anchor", "end")
         .attr("class", "axis_label")
-        .attr("id", "x_axis_label");
+        .attr("id", "x_axis_label")
+        .style("font-weight", "bold");
 
     svg.append("text")
-        .text("Sales (Millions of US $)")
+        .text("Total Sales (Millions of US $)")
         .attr("transform", 'rotate(-90)')
-        .attr("x", -(height/2)+margin.top+margin.bottom )
+        .attr("x", -(height/2)+margin.top+margin.bottom+20)
         .attr("y", -50)
         .attr("text-anchor", "end")
         .attr("class", "axis_label")
-        .attr("id", "y_axis_label");
+        .attr("id", "y_axis_label")
+        .style("font-weight", "bold");
+
+
+        const timeFormat = d3.timeFormat("%Y")
+        const type = d3.annotationCalloutElbow
+
+        const annotations = [
+        {
+          note: {
+            label: "This console was actually adapted from a Sega arcade cabinet and was one of first 16-bit consoles.",
+            title: "Sega Genesis:"
+          },
+          //can use x, y directly instead of data
+          id: 'annotation_1',
+          data: { Year: 1991, sales: 4.34 },
+          dy: -55,
+          dx: 119,
+          color: "Black",
+        },
+        
+        {
+            note: {
+              label: "Despite being released at the end of the GameBoy's life, Pokemon Red/Blue was a massive hit. \
+              Even in 2023, it still has the most number of copies sold of any other game in the franchise.",
+              title: "Pokemon:"
+            },
+            //can use x, y directly instead of data
+            id: 'annotation_2',
+            data: { Year: 1996, sales: 86.06 },
+            dy: -75,
+            dx: -169,
+            color: "Black",
+        },
+        {
+            note: {
+              label: "Sony joined the market late but more games were sold for the PlayStation in just 3 years than any Nintendo consoles.",
+              title: "Sony:"
+            },
+            //can use x, y directly instead of data
+            id: 'annotation_3',
+            data: { Year: 1996, sales: 94.68 },
+            dy: -11.5,
+            dx: 221.5,
+            color: "Black",
+        },
+        {
+            note: {
+              label: "Even though the Atari 2600 was still very popular, most games at this time were sold for the NES.",
+              title: "Atari 2600:"
+            },
+            //can use x, y directly instead of data
+            id: 'annotation_4',
+            data: { Year: 1987, sales: 1.98 },
+            dy: -34.69999999999999,
+            dx: 113,
+            color: "Black",
+        },
+    
+    
+    
+        ]
+                      
+          
+          const makeAnnotations = d3.annotation().annotations(annotations)
+          .editMode(true)
+          //also can set and override in the note.padding property
+          //of the annotation object
+          .notePadding(15)
+          .type(type)
+          //accessors & accessorsInverse not needed
+          //if using x, y in annotations JSON
+          .accessors({
+            x: d => x_scale(parse_year(+d.Year)),
+            y: d => y_scale(+d.sales)
+          })
+          .accessorsInverse({
+             Year: d => timeFormat(x_scale.invert(d.x)),
+             sales: d => y_scale.invert(d.y)
+          });
+        
+        svg.append("g")
+          .attr("class", "annotation-group")
+          .call(makeAnnotations)
+        
+        // const annotate = d3.select(".annotation callout elbow");
+
+        // const test_data = { Year: 2009, sales: 326.54 };
+
 
 }
 
@@ -886,16 +794,13 @@ async function update_viz(data_file_name){
     //     .attr("text-anchor", "middle")
     //     .text(data_file_name);
 
-    // d3.select("p").html('')
-    
-    // d3.select("p").html('<strong>Average Sales Lines:<br></strong> \
-    // Each line was calculated by summing the sales of each game for each year, and each console manufacturer \
-    // and then dividing by the number of games for each year, and each console manufacturer.')
     
 
 }
 
 
-const  total_data_file_name = "js/data/videogames_total_sales_per_year.csv"
-const  avg_data_file_name = "js/data/videogames_average_sales_per_year.csv"
-const  max_data_file_name = "js/data/videogames_max_sales_per_year.csv"
+
+
+const  total_data_file_name = "../js/data/videogames_total_sales_per_year.csv"
+const  avg_data_file_name = "../js/data/videogames_average_sales_per_year.csv"
+const  max_data_file_name = "../js/data/videogames_max_sales_per_year.csv"

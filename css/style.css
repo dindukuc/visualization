@@ -11,7 +11,7 @@ h1 {
     /* top: 50px; */
 }
 
-p{
+#line_desc{
     position: absolute;
     z-index: 2;
     left: 1660px;
