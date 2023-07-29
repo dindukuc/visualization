@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>Interactive Chart</title>
+    <link rel="icon" type="image/png" sizes="32x32" href="../favicon_io/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="../favicon_io/favicon-16x16.png">
+    <link rel="stylesheet" type="text/css" href="../css/style.css">
+    <script src="https://d3js.org/d3.v6.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/d3-annotation/2.5.1/d3-annotation.min.js"></script>
+    <script src="../js/script.js"></script>
+</head>
+<body onload="update_viz(total_data_file_name)" >
+    <h1>Video Game Sales through the Decades: Interactive Chart</h1>
+    <p id="line_desc"><strong>Total Sales Lines:<br></strong>
+        Each line was calculated by summing the sales of every game in each year and each console manufacturer.
+    </p>
+
+    <p id="instructions"><strong>Instructions:<br></strong>
+        Click and drag to zoom Double-click to reset zoom
+    </p>
+
+    <div id = "scene_selectors">
+        <h4>Scene Selectors:</h4>
+        <form action="../index.html">
+            <input type="submit" value="1980-1989"/>
+        </form>
+        <form action="../html/scene2.html">
+            <input type="submit" value="1990-1999"/>
+        </form>
+        <form action="../html/scene3.html">
+            <input type="submit" value="2000-2009"/>
+        </form>
+        <form action="../html/scene4.html">
+            <input type="submit" value="2010-2015"/>
+        </form>
+    </div>
+
+    
+    <div id = "line_changers">
+        <button onclick="update_viz(total_data_file_name)" class = "update_button">Total</button>
+        <br>
+        <button onclick="update_viz(avg_data_file_name)" class = "update_button">Average</button>
+        <br>
+        <button onclick="update_viz(max_data_file_name)" class = "update_button">Maximum</button>
+        <br>
+    </div>
+    
+    <div id = "line_selectors">
+        <label><input type="checkbox" id="nintendo_checkbox" checked="checked"> Nintendo</label>
+        <br>
+        <label><input type="checkbox" id="sega_checkbox" checked="checked"> Sega</label>
+        <br>
+        <label><input type="checkbox" id="sony_checkbox" checked="checked"> Sony</label>
+        <br>
+        <label><input type="checkbox" id="xbox_checkbox" checked="checked"> Xbox</label>
+        <br>
+        <label><input type="checkbox" id="other_checkbox" checked="checked"> Other</label>
+    </div>
+
+
+    <div id = "checkbox_div"></div>
+    <div id="chart"></div>
+   
+</body>
+</html>
