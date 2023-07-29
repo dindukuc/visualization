@@ -850,7 +850,12 @@ async function create_viz(data_file_name) {
     const other_checkbox = d3.select("#other_checkbox").on("click", hide_other_line);
         
 
-
+    nintendo_checkbox.property("checked", true);
+    sega_checkbox.property("checked", true);
+    sony_checkbox.property("checked", true);
+    xbox_checkbox.property("checked", true);
+    other_checkbox.property("checked", true);
+      
     create_legend(data);
 
     //add axis labels and such
