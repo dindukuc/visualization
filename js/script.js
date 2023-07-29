@@ -880,19 +880,6 @@ async function update_viz(data_file_name){
     d3.select("#chart").html('');
     await create_viz(data_file_name);
 
-
-    // d3.select("svg")
-    //     .append("text")
-    //     .attr("x", 485)
-    //     .attr("y", 100)
-    //     .attr("text-anchor", "middle")
-    //     .text(data_file_name);
-
-    // d3.select("p").html('')
-    
-    // d3.select("p").html('<strong>Average Sales Lines:<br></strong> \
-    // Each line was calculated by summing the sales of each game for each year, and each console manufacturer \
-    // and then dividing by the number of games for each year, and each console manufacturer.')
     
 
 }
