@@ -860,6 +860,28 @@ async function create_viz(data_file_name) {
 
     //add axis labels and such
 
+    var line_measure = "Total";
+    var line_desc = "<strong>Total Sales Lines:<br></strong> \
+    Each line was calculated by summing the sales of every game for each year and each console manufacturer.";
+
+    if (data_file_name === total_data_file_name){
+        line_measure = "Total";
+        line_desc = "<strong>Total Sales Lines:<br></strong> \
+        Each line was calculated by summing the sales of every game for each year and each console manufacturer.";
+    }
+    else if (data_file_name === avg_data_file_name){
+        line_measure = "Avg.";
+        line_desc = "<strong>Average Sales Lines:<br></strong> \
+        Each line was calculated by summing the sales of every game for each year and each console manufacturer, then dividing that value by the number of games."
+    }
+    else if (data_file_name === max_data_file_name){
+        line_measure = "Maximum"
+        line_desc = "<strong>Maximum Sales Lines:<br></strong> \
+        Each line was calculated by finding the top selling game for each year and each console manufacturer."
+    }
+
+
+
     svg.append("text")
         .text("Year")
         .attr("x", width/2 + margin.left/2 - 4)
@@ -870,7 +892,7 @@ async function create_viz(data_file_name) {
         .style("font-weight", "bold");
 
     svg.append("text")
-        .text("Total Sales (Millions of US $)")
+        .text(line_measure + " Sales (Millions of US $)")
         .attr("transform", 'rotate(-90)')
         .attr("x", -(height/2)+margin.top+margin.bottom )
         .attr("y", -50)
@@ -878,6 +900,10 @@ async function create_viz(data_file_name) {
         .attr("class", "axis_label")
         .attr("id", "y_axis_label")
         .style("font-weight", "bold");
+
+
+
+    d3.select("#line_desc").html(line_desc);
 
 }
 
