@@ -861,16 +861,18 @@ async function create_viz(data_file_name) {
         .attr("y", height + margin.bottom + margin.top)
         .attr("text-anchor", "end")
         .attr("class", "axis_label")
-        .attr("id", "x_axis_label");
+        .attr("id", "x_axis_label")
+        .style("font-weight", "bold");
 
     svg.append("text")
-        .text("Sales (Millions of US $)")
+        .text("Total Sales (Millions of US $)")
         .attr("transform", 'rotate(-90)')
         .attr("x", -(height/2)+margin.top+margin.bottom )
         .attr("y", -50)
         .attr("text-anchor", "end")
         .attr("class", "axis_label")
-        .attr("id", "y_axis_label");
+        .attr("id", "y_axis_label")
+        .style("font-weight", "bold");
 
 }
 

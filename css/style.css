@@ -20,6 +20,15 @@ h1 {
     width: 200px;
 }
 
+#instructions{
+    position: absolute;
+    z-index: 2;
+    left: 1660px;
+    top:750px;
+    border: 3px solid #73AD21;
+    width: 200px;
+}
+
 /* .tooltip {
     fill: #2b2929;
     font-family: Georgia;
