@@ -419,7 +419,7 @@ async function create_viz(data_file_name) {
     var x_scale = d3.scaleTime()
         .domain(
             d3.extent(data, d => parse_year(d.Year))
-        )
+        ).nice()
         .range([0, width]);
     
 
@@ -488,7 +488,7 @@ async function create_viz(data_file_name) {
           x_scale.domain(d3.extent(data, d => parse_year(d.Year)))
           y_scale.domain([ 0, d3.max(data, d => d3.max([+d.Nintendo, +d.Other, +d.PC, +d.Sega, +d.Sony, +d.Xbox])) ]) //changed domain -- maybe make it a variable later
         }else{
-          x_scale.domain([ x_scale.invert(extent[0][0]), x_scale.invert(extent[1][0]) ])
+          x_scale.domain([ x_scale.invert(extent[0][0]), x_scale.invert(extent[1][0]) ]).nice()
           y_scale.domain([ y_scale.invert(extent[1][1]), y_scale.invert(extent[0][1]) ]).nice()
           line.select(".brush").call(brush.move, null) // This remove the grey brush area as soon as the selection has been done
         }
@@ -506,7 +506,7 @@ async function create_viz(data_file_name) {
 
 
     svg.on("dblclick",function(){
-        x_scale.domain(d3.extent(data, d => parse_year(d.Year)))
+        x_scale.domain(d3.extent(data, d => parse_year(d.Year))).nice()
         x_axis.transition().duration(1000).call(d3.axisBottom(x_scale))
         
         y_scale.domain([ 0, d3.max(data, d => d3.max([+d.Nintendo, +d.Other, +d.PC, +d.Sega, +d.Sony, +d.Xbox])) ]).nice()  
